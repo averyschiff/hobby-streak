@@ -1,0 +1,13 @@
+To-do: 
+Stage 1 - 32
+Stage 2 - 33
+Stage 3 - 17
+
+Done:
+
+Estimated Velocity: 6 points/week
+
+Projected timeline:
+Stage 1 - 02/12
+Stage 2 - 04/02
+Stage 3 - 04/30

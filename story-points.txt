@@ -8,6 +8,13 @@ Done:
 Estimated Velocity: 6 points/week
 
 Projected timeline:
-Stage 1 - 02/12
-Stage 2 - 04/02
-Stage 3 - 04/30
+Stage 1 - 02/12 (glorified excel spreadsheet)
+* 01/15 - User can access an app with a dynamic checklist for a single unit
+* 01/29 - User can work with entire units, including tags and indiviudal notes for each model
+
+Stage 2 - 04/02 (MVP)
+* 03/05 - User has a unique profile with external data and some tracked data
+* 03/19 - User has connected their social media profiles with their account
+
+Stage 3 - 05/07 (stretch)
+* 04/27 - User can view and search for other profiles

@@ -108,7 +108,7 @@ function createModelTable(sample=false){
 				"REFERENCES units (unit_id)" +
 			")"
 	const insertModel = "INSERT INTO models (modelName, army_id, unit_id) values(?, ?, ?)"
-	const insertModelArr = ["MMM Model 1", 1, 1]
+	const insertModelArr = ["Model 1", 1, 1]
 	createTable(sample, createModels, insertModel, insertModelArr)
 }
 

@@ -18,7 +18,7 @@ function updateUnit(updateString, unit_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"UPDATE units SET ? WHERE unit_id = ?",
+				"UPDATE units SET ? WHERE id = ?",
 				[updateString, unit_id],
 				callback,
 				errorHandler
@@ -31,7 +31,7 @@ function getUnit(unit_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"SELECT * FROM units WHERE unit_id = ?",
+				"SELECT * FROM units WHERE id = ?",
 				[unit_id],
 				callback,
 				errorHandler
@@ -71,7 +71,7 @@ function deleteUnit(unit_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"DELETE FROM units WHERE unit_id = ?",
+				"DELETE FROM units WHERE id = ?",
 				[unit_id],
 				callback,
 				errorHandler

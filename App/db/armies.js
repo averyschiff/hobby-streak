@@ -18,7 +18,7 @@ function updateArmy(updateString, army_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"UPDATE armies SET ? WHERE army_id = ?",
+				"UPDATE armies SET ? WHERE id = ?",
 				[updateString, army_id],
 				callback,
 				errorHandler
@@ -31,7 +31,7 @@ function getArmy(army_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"SELECT * FROM armies WHERE army_id = ?",
+				"SELECT * FROM armies WHERE id = ?",
 				[army_id],
 				callback,
 				errorHandler
@@ -57,7 +57,7 @@ function deleteArmy(army_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"DELETE FROM armies WHERE army_id = ?",
+				"DELETE FROM armies WHERE id = ?",
 				[army_id],
 				callback,
 				errorHandler

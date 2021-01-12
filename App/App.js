@@ -3,37 +3,34 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import * as SQLite from 'expo-sqlite'
 const db = SQLite.openDatabase('hobby.db');
+import styles from './styles'
+import {Provider} from 'react-redux'
 
 import {dbInit} from "./db"
+import SingleModel from "./Components/SingleModel"
+import store from './store'
 
 export default function App() {
 
 
 	//Create databases if non-existent
 	React.useEffect(()=>{
+		/*
 		dbInit.clearTables()
 		dbInit.createArmyTable(true)
-		dbInit.testArmyTable()
 		dbInit.createUnitTable(true)
-		dbInit.testUnitTable()
 		dbInit.createModelTable(true)
-		dbInit.testModelTable()
 		dbInit.createTaskTable(true)
+		*/
+		//dbInit.testArmyTable()
+		//dbInit.testUnitTable()
+		//dbInit.testModelTable()
 		dbInit.testTaskTable()
 	})
 	return (
-		<View style={styles.container}>
-		<Text>Welcome to our Hobby Streak app!</Text>
-		<StatusBar style="auto" />
-		</View>
+		<Provider store={store}>
+			<SingleModel model_id={1} unitName={"Mork's Mighty Mushroom"}/>
+		</Provider>
 	);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

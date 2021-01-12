@@ -18,7 +18,7 @@ function updateModel(updateString, model_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"UPDATE models SET ? WHERE model_id = ?",
+				"UPDATE models SET ? WHERE id = ?",
 				[updateString, model_id],
 				callback,
 				errorHandler
@@ -31,7 +31,7 @@ function getModel(model_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"SELECT * FROM models WHERE model_id = ?",
+				"SELECT * FROM models WHERE id = ?",
 				[model_id],
 				callback,
 				errorHandler
@@ -84,7 +84,7 @@ function deleteModel(model_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"DELETE FROM models WHERE model_id = ?",
+				"DELETE FROM models WHERE id = ?",
 				[model_id],
 				callback,
 				errorHandler

@@ -18,7 +18,7 @@ function updateTask(updateString, task_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"UPDATE tasks SET ? WHERE task_id = ?",
+				"UPDATE tasks SET ? WHERE id = ?",
 				[updateString, task_id],
 				callback,
 				errorHandler
@@ -57,7 +57,7 @@ function getTask(task_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"SELECT * FROM tasks WHERE task_id = ?",
+				"SELECT * FROM tasks WHERE id = ?",
 
 				[task_id],
 				callback,
@@ -67,11 +67,11 @@ function getTask(task_id, callback, errorHandler){
 	)
 }
 
-function getsTasksByModel(model_id, callback, errorHandler){
+function getTasksByModel(model_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"SELECT * FROM tasks WHERE model_id = ?",
+				"SELECT id, task, complete FROM tasks WHERE model_id = ?",
 				[model_id],
 				callback,
 				errorHandler
@@ -80,7 +80,7 @@ function getsTasksByModel(model_id, callback, errorHandler){
 	)
 }
 
-function getsTasksByUnit(unit_id, callback, errorHandler){
+function getTasksByUnit(unit_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
@@ -93,7 +93,7 @@ function getsTasksByUnit(unit_id, callback, errorHandler){
 	)
 }
 
-function getsTasksByArmy(army_id, callback, errorHandler){
+function getTasksByArmy(army_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
@@ -123,7 +123,7 @@ function deleteTask(task_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"DELETE FROM tasks WHERE task_id = ?",
+				"DELETE FROM tasks WHERE id = ?",
 				[model_id],
 				callback,
 				errorHandler

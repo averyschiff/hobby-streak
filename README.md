@@ -4,7 +4,7 @@
 
  - User can set the name of the model
  - User can set the quantity of the model
- - User can check the boxes to indicate their progress
+ - User can check boxes next to steps to indicate their progress
  - User can remove a step if it is not necessary
  - User can see their progress represented as a bar and percentage
  - User can add an arbitrary number of tags
@@ -33,7 +33,7 @@
   - User can add pictures of their army (may have to start thinking about data limits at this point)
   
   ## Tier 4 (Social)
-  - User can create a profile (potentially with unique username)
+  - User can create a profile (with unique username)
   - User can set their password
   - User can search for other users by name or username
   - User can add others as friends

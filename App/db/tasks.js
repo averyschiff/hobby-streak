@@ -14,12 +14,25 @@ function newTask(task, model_id, unit_id, army_id, callback, errorHandler){
   )
 }
 
-function updateTask(updateString, task_id, callback, errorHandler){
+function updateTaskTrue(task_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"UPDATE tasks SET ? WHERE id = ?",
-				[updateString, task_id],
+				"UPDATE tasks SET complete = 1 WHERE id = ?",
+				[task_id],
+				callback,
+				errorHandler
+			)
+		}
+	)
+}
+
+function updateTaskFalse(task_id, callback, errorHandler){
+	db.transaction(
+		tx=>{
+			tx.executeSql(
+				"UPDATE tasks SET complete = 0 WHERE id = ?",
+				[task_id],
 				callback,
 				errorHandler
 			)
@@ -170,7 +183,8 @@ function deleteTasksByArmy(army_id, callback, errorHandler){
 }
 export default{
 	newTask,
-	updateTask,
+	updateTaskTrue,
+	updateTaskFalse,
 	updateTasksByUnit,
 	updateTasksByArmy,
 	getTask,

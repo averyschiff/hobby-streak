@@ -22,14 +22,16 @@ export default styles = StyleSheet.create({
 	taskList:{
 		flex: 1,
 		alignContent: 'flex-start',
+		minWidth: 300,
 	},
 	taskItem: {
 		backgroundColor: '#f9c2ff',
 		padding: 10,
 		marginVertical: 4,
 		marginHorizontal: 4,
-		width: 150,
-			
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'center',
 	},
 	task: {
 		fontSize: 16,

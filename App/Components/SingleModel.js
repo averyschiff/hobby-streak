@@ -2,23 +2,18 @@ import React from 'react'
 import {connect} from 'react-redux'
 import styles from '../styles.js'
 import {Text, View, FlatList} from 'react-native'
-import {getModel, getTasks} from '../store/singleModel'
+import {getModel, getTasks, updateTask} from '../store/singleModel'
+import CheckBox from '@react-native-community/checkbox'
 
-const DATA = [
-	{
-		id: 1,
-		task: 'testTask'
-	}
-]
-
-const Task = ({task}) => (
+const Task = ({task, id, complete, updateTask}) => (
 	<View style={styles.taskItem}>
+		<CheckBox
+			disabled={false}
+			value={complete}
+			onValueChange={(newValue)=>updateTask(id, newValue)}
+		/>
 		<Text style={styles.task}>{task}</Text>
 	</View>
-)
-
-const renderItem = ({item}) => (
-	<Task task={item.task} />
 )
 
 export class SingleModel extends React.Component{
@@ -30,6 +25,12 @@ export class SingleModel extends React.Component{
 		await this.props.getTasks(this.props.model_id)
 	}
 
+	renderItem = ({item}) => (
+		<Task task={item.task} 
+		complete={item.complete} 
+		id={item.id}
+		updateTask={this.props.updateTask}/>
+	)
 
 	render(){
 		return(
@@ -40,7 +41,7 @@ export class SingleModel extends React.Component{
 						<Text>{this.props.unitName}</Text>
 						<FlatList
 							data={this.props.tasks}
-							renderItem ={renderItem}
+							renderItem ={this.renderItem}
 							keyExtractor={item=>item.id.toString()}
 							columnWrapperStyle={styles.taskList}
 							numColumns={2}
@@ -64,7 +65,10 @@ const mapDispatch = dispatch => ({
 	},
 	getTasks: (model_id)=>{
 		dispatch(getTasks(model_id))
-	}
+	},
+	updateTask: (task_id, value)=>{
+		dispatch(updateTask(task_id, value))
+	},
 })
 
 export default connect(mapState, mapDispatch)(SingleModel)

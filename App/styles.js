@@ -13,8 +13,7 @@ export default styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	modelText: {
-		flex: 1,
-		alignItems: 'center',
+		marginBottom: 10,
 	},
 	modelName: {
 		marginTop: 50,

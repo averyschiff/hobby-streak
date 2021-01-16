@@ -1,3 +1,4 @@
+import { ActionSheetIOS } from "react-native"
 import {models, tasks} from "../db/"
 
 const SET_MODEL = 'SET_MODEL'
@@ -104,9 +105,12 @@ export const updateTask = (task_id, value) => {
 const initialModel = {
 	model: {},
 	tasks: [],
+	progress: 0,
 }
 
 export default function (state=initialModel, action){
+	let newProgress = 0
+	let oldLength = state.tasks.length
 	switch (action.type){
 		case SET_MODEL:
 			return {
@@ -116,27 +120,36 @@ export default function (state=initialModel, action){
 		case SET_TASKS:
 			return {
 				...state,
-				tasks: action.tasks.map(task =>({
+				tasks: action.tasks.map(task =>{
+					if (task.complete) newProgress++
+					return {
 					...task,
 					complete: task.complete==0?false:true
-				}))
+					}
+				}),
+				progress: newProgress/action.tasks.length
 			}
 		case ADD_TASK:
+			newProgress = state.progress*oldLength/(oldLength+1)
 			return {
 				...state,
 				tasks: [
 					...state.tasks,
 					action.task
-				]
+				],
+				progress: newProgress,
 			}
 		case TOGGLE_TASK:
+			if (action.value) newProgress = state.progress + 1/state.tasks.length
+			else newProgress = state.progress - 1/state.tasks.length
 			return {
 				...state,
 				tasks: state.tasks.map(task=>{
 					if (task.id==action.task_id){
 						return {...task, complete: action.value}
 					}else return task
-				})
+				}),
+				progress: newProgress
 			}
 		default:
 			return state

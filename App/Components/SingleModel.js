@@ -4,6 +4,7 @@ import styles from '../styles.js'
 import {Text, View, FlatList} from 'react-native'
 import {getModel, getTasks, updateTask} from '../store/singleModel'
 import CheckBox from '@react-native-community/checkbox'
+import ProgressBar from 'react-native-progress/Bar'
 
 const Task = ({task, id, complete, updateTask}) => (
 	<View style={styles.taskItem}>
@@ -34,30 +35,31 @@ export class SingleModel extends React.Component{
 
 	render(){
 		return(
-			<View style={styles.singleModel}>
-				{(this.props.model.modelName && 
-				this.props.tasks.length>0)?
-					(<View style={styles.modelText}>
+			this.props.model.modelName && 
+			this.props.tasks.length>0?
+				(<View style={styles.singleModel}>
+					<View style={styles.modelText}>
 						<Text style={styles.modelName}>{this.props.model.modelName}</Text>
 						<Text>{this.props.unitName}</Text>
-						<FlatList
-							data={this.props.tasks}
-							renderItem ={this.renderItem}
-							keyExtractor={item=>item.id.toString()}
-							columnWrapperStyle={styles.taskList}
-							numColumns={2}
-						/>
-					</View>):
-					(<Text>Single Model View</Text>)
-				}
-			</View>
-		)
+					</View>
+					<ProgressBar progress={this.props.progress} width={300}/>
+					<FlatList
+						data={this.props.tasks}
+						renderItem ={this.renderItem}
+						keyExtractor={item=>item.id.toString()}
+						columnWrapperStyle={styles.taskList}
+						numColumns={2}
+					/>
+				</View>):
+				(<View><Text>Single Model View</Text></View>)
+			)
 	}
 }
 
 const mapState = state => ({
 	model: state.singleModel.model,
 	tasks: state.singleModel.tasks,
+	progress: state.singleModel.progress,
 })
 
 const mapDispatch = dispatch => ({

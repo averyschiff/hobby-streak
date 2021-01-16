@@ -8,7 +8,8 @@ export default styles = StyleSheet.create({
 	},
 	singleModel: {
 		flex: 1,
-		backgroundColor: '#D4BF89',
+		//backgroundColor: '#D4BF89',
+		backgroundColor: '#fff',
 		alignItems: 'center',
 	},
 	modelText: {
@@ -25,7 +26,8 @@ export default styles = StyleSheet.create({
 		minWidth: 300,
 	},
 	taskItem: {
-		backgroundColor: '#f9c2ff',
+		//backgroundColor: '#f9c2ff',
+		backgroundColor: '#add8e6',
 		padding: 10,
 		marginVertical: 4,
 		marginHorizontal: 4,

@@ -6,28 +6,28 @@ function clearTables(){
 		tx.executeSql("DROP TABLE armies")
 		tx.executeSql("DROP TABLE units")
 		tx.executeSql("DROP TABLE models")
-		tx.executeSql("DROP TABLE tasks")
+		//tx.executeSql("DROP TABLE tasks")
 	})
 }
 
 
-const createSampleTable = (sample, insert, insertArr) => {
+const createSampleTable = (sample, insert, insertArr, callback) => {
 	if (sample){
 		return (tx, rows) => {
 			tx.executeSql(insert,
 				insertArr,
-				null,
+				callback,
 				(tx, err) => alert('error creating sample: ' + err)
 			)
 		}
-	} else return null
+	} else return callback
 }
 
-const createTable = (sample, create, insert, insertArr, select) => {
+const createTable = (sample, create, insert, insertArr, callback) => {
 	db.transaction(tx => {
 		tx.executeSql(create, 
 			[], 
-			createSampleTable(sample, insert, insertArr),
+			createSampleTable(sample, insert, insertArr, callback),
 			(tx, err) => {
 				alert('Error creating table: ' + err)
 			})
@@ -47,7 +47,7 @@ const testTable = (select) => {
 	})
 }
 
-function createArmyTable(sample=false){
+function createArmyTable(callback, sample=false){
 	const createArmies = 
 		"CREATE TABLE IF NOT EXISTS armies " +
 			"(id INTEGER " +
@@ -58,7 +58,7 @@ function createArmyTable(sample=false){
 				"DEFAULT 0.0 CHECK (completion >= 0.0 AND completion <= 1.0))"
 	const insertArmy = "INSERT INTO armies (armyName) values(?)"
 	const insertArmyArr = ["sampleArmy"]
-	createTable(sample, createArmies, insertArmy, insertArmyArr)
+	createTable(sample, createArmies, insertArmy, insertArmyArr, callback)
 }
 
 function testArmyTable(){
@@ -66,7 +66,7 @@ function testArmyTable(){
 	testTable(selectArmy)
 }
 
-function createUnitTable(sample=false){
+function createUnitTable(callback,sample=false){
 	const createUnits = 
 		"CREATE TABLE IF NOT EXISTS units " +
 			"(id INTEGER " +
@@ -82,14 +82,14 @@ function createUnitTable(sample=false){
 			")"
 	const insertUnit = "INSERT INTO units (unitName, army_id) values(?, ?)"
 	const insertUnitArr = ["Mork's Mighty Mushroom", 1]
-	createTable(sample, createUnits, insertUnit, insertUnitArr)
+	createTable(sample, createUnits, insertUnit, insertUnitArr, callback)
 }
 
 function testUnitTable(){
 	const selectUnit = "SELECT * FROM units"
 	testTable(selectUnit)
 }
-function createModelTable(sample=false){
+function createModelTable(callback,sample=false){
 	const createModels = 
 		"CREATE TABLE IF NOT EXISTS models " +
 			"(id INTEGER " +
@@ -109,14 +109,14 @@ function createModelTable(sample=false){
 			")"
 	const insertModel = "INSERT INTO models (modelName, army_id, unit_id) values(?, ?, ?)"
 	const insertModelArr = ["Model 1", 1, 1]
-	createTable(sample, createModels, insertModel, insertModelArr)
+	createTable(sample, createModels, insertModel, insertModelArr, callback)
 }
 
 function testModelTable(){
 	const selectModel = "SELECT * FROM models"
 	testTable(selectModel)
 }
-function createTaskTable(sample=false){
+function createTaskTable(callback,sample=false){
 	const createTasks = 
 		"CREATE TABLE IF NOT EXISTS tasks " +
 			"(id INTEGER " +
@@ -148,7 +148,7 @@ function createTaskTable(sample=false){
 		"(?, 1, 1, 1), "+
 		"(?, 1, 1, 1)"
 	const insertTaskArr = ["Unfucked", "Built", "Primed", "Basecoat", "Painted", "Based", "Magnetized", "Lacquered"]
-	createTable(sample, createTasks, insertTask, insertTaskArr)
+	createTable(sample, createTasks, insertTask, insertTaskArr, callback)
 }
 
 

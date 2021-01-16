@@ -35,9 +35,10 @@ export class SingleModel extends React.Component{
 	render(){
 		return(
 			<View style={styles.singleModel}>
-				{(this.props.modelName && this.props.tasks)?
+				{(this.props.model.modelName && 
+				this.props.tasks.length>0)?
 					(<View style={styles.modelText}>
-						<Text style={styles.modelName}>{this.props.modelName}</Text>
+						<Text style={styles.modelName}>{this.props.model.modelName}</Text>
 						<Text>{this.props.unitName}</Text>
 						<FlatList
 							data={this.props.tasks}
@@ -55,7 +56,7 @@ export class SingleModel extends React.Component{
 }
 
 const mapState = state => ({
-	modelName: state.singleModel.modelName,
+	model: state.singleModel.model,
 	tasks: state.singleModel.tasks,
 })
 

@@ -3,6 +3,18 @@ import {models, tasks} from "../db/"
 const SET_MODEL = 'SET_MODEL'
 const SET_TASKS = 'SET_TASKS'
 const TOGGLE_TASK = 'TOGGLE_TASK'
+const ADD_TASK = 'ADD_TASK'
+
+const DEFAULT_TASKS = [
+	"Unfucked", 
+	"Built", 
+	"Primed", 
+	"Basecoat", 
+	"Painted", 
+	"Based", 
+	"Magnetized", 
+	"Lacquered",
+]
 
 export const setModel = (model) => ({
 	type: SET_MODEL,
@@ -12,6 +24,11 @@ export const setModel = (model) => ({
 export const setTasks = (tasks) => ({
 	type: SET_TASKS,
 	tasks
+})
+
+export const addTask = (task) => ({
+	type: ADD_TASK,
+	task
 })
 
 export const toggleTask = (task_id, value) => ({
@@ -35,9 +52,31 @@ export const getTasks = (model_id) => {
 	return async dispatch => {
 		await tasks.getTasksByModel(model_id,
 			(_, {rows}) => {
-				dispatch(setTasks(rows['_array']))
+				if(rows['_array'].length==0){
+					//create default tasks
+					DEFAULT_TASKS.forEach(task=>{
+						dispatch(createTask(task, model_id, 1, 1))
+					})
+				}else{
+					dispatch(setTasks(rows['_array']))
+				}
 			},
 			(_, err) => {alert('Error retrieving tasks: ' + err)}
+		)
+	}
+}
+
+export const createTask = (taskName, model_id, unit_id, army_id) => {
+	return async dispatch => {
+		await tasks.newTask(taskName, model_id, unit_id, army_id,
+			(_, {insertId}) => {
+				dispatch(addTask({
+					id: insertId, 
+					task: taskName, 
+					complete: 0
+				}))
+			},
+			(_, err) => {alert('Error creating task: ' + err)}
 		)
 	}
 }
@@ -62,15 +101,17 @@ export const updateTask = (task_id, value) => {
 	}
 }
 
-const initialModel = {}
+const initialModel = {
+	model: {},
+	tasks: [],
+}
 
 export default function (state=initialModel, action){
-	console.log(action.type)
 	switch (action.type){
 		case SET_MODEL:
 			return {
 				...state,
-				modelName: action.model.modelName
+				model: action.model
 			}
 		case SET_TASKS:
 			return {
@@ -79,6 +120,14 @@ export default function (state=initialModel, action){
 					...task,
 					complete: task.complete==0?false:true
 				}))
+			}
+		case ADD_TASK:
+			return {
+				...state,
+				tasks: [
+					...state.tasks,
+					action.task
+				]
 			}
 		case TOGGLE_TASK:
 			return {

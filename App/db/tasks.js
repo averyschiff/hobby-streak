@@ -137,7 +137,7 @@ function deleteTask(task_id, callback, errorHandler){
 		tx=>{
 			tx.executeSql(
 				"DELETE FROM tasks WHERE id = ?",
-				[model_id],
+				[task_id],
 				callback,
 				errorHandler
 			)

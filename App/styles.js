@@ -22,20 +22,26 @@ export default styles = StyleSheet.create({
 	taskList:{
 		flex: 1,
 		alignContent: 'flex-start',
-		minWidth: 300,
+		width: 300,
 	},
 	taskItem: {
 		//backgroundColor: '#f9c2ff',
 		backgroundColor: '#add8e6',
-		padding: 10,
+		padding: 4,
 		marginVertical: 4,
-		marginHorizontal: 4,
+		marginHorizontal: 2,
+		flex: 1/2,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	taskBoxAndText: {
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
 	},
 	task: {
-		fontSize: 16,
+		fontSize: 14,
 	},
 
 });

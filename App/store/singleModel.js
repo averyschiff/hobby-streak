@@ -5,6 +5,7 @@ const SET_MODEL = 'SET_MODEL'
 const SET_TASKS = 'SET_TASKS'
 const TOGGLE_TASK = 'TOGGLE_TASK'
 const ADD_TASK = 'ADD_TASK'
+const REMOVE_TASK = 'REMOVE_TASK'
 
 const DEFAULT_TASKS = [
 	"Unfucked", 
@@ -36,6 +37,11 @@ export const toggleTask = (task_id, value) => ({
 	type: TOGGLE_TASK,
 	task_id,
 	value
+})
+
+export const removeTask = (task_id) => ({
+	type: REMOVE_TASK,
+	task_id,
 })
 
 export const getModel = (model_id) => {
@@ -102,6 +108,17 @@ export const updateTask = (task_id, value) => {
 	}
 }
 
+export const deleteTask = (task_id)=>{
+	return async dispatch => {
+		await tasks.deleteTask(task_id,
+			(_, rows) => {
+				dispatch(removeTask(task_id))
+			},
+			(_, err) => {alert('Error deleting task: ') + err}
+		)
+	}
+}
+
 const initialModel = {
 	model: {},
 	tasks: [],
@@ -150,6 +167,19 @@ export default function (state=initialModel, action){
 					}else return task
 				}),
 				progress: newProgress
+			}
+		case REMOVE_TASK:
+			return {
+				...state,
+				tasks: state.tasks.filter(task=>{
+					if (task.id!=action.task_id){
+						if (task.complete) newProgress++
+						return true
+					}else{
+						return false
+					}
+				}),
+				progress: oldLength>1?newProgress/(oldLength-1):0
 			}
 		default:
 			return state

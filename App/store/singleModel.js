@@ -126,18 +126,8 @@ export const deleteTask = (task_id)=>{
 }
 
 export const updateNote = async (note, model_id) => {
-	console.log('Note: ' + note)
 	await models.updateModelNote(note, model_id,
-		(_, rows) => {
-			models.getModel(model_id,
-				(_, {rows}) => {
-					console.log(rows)
-				},
-				(_, {err}) => {
-					console.log('fucky wucky: ' + err)
-				}
-			)
-		},
+		null,
 		(_, err)=> {alert('Error updating note: ') + err}
 	)
 }

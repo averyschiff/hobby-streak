@@ -11,7 +11,11 @@ export default Task = ({task, id, complete, updateTask, deleteTask, createTask})
 			<View style={styles.taskItem}>
 				<View style={styles.taskBoxAndText}>
 					<CheckBox
-						disabled={false}
+            disabled={false}
+            tintColors={{
+                true: '#007AFF',
+                false: '#000'
+            }}
 						value={complete}
 						onValueChange={(newValue)=>updateTask(id, newValue)}
 					/>
@@ -23,10 +27,12 @@ export default Task = ({task, id, complete, updateTask, deleteTask, createTask})
 				/>
 			</View>
 			):
-			(<View style={styles.taskItem}>
+			(<View style={{
+          ...styles.taskItem, 
+          borderWidth: 0,
+        }}>
 				<TextInput
 				style={{ height: 20, 
-					borderColor: 'gray', 
 					borderWidth: 0,
           width: 110,
         }}

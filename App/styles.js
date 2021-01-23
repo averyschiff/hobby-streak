@@ -7,10 +7,8 @@ export default styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	singleModel: {
-		flex: 1,
-		//backgroundColor: '#D4BF89',
-		backgroundColor: '#fff',
-		alignItems: 'center',
+		//backgroundColor: '#fff',
+		alignItems: 'center'
 	},
 	modelText: {
 		marginBottom: 10,
@@ -22,7 +20,7 @@ export default styles = StyleSheet.create({
 	taskList:{
 		flex: 1,
 		alignContent: 'flex-start',
-		width: 300,
+		width: 300, 
 	},
 	taskItem: {
 		//backgroundColor: '#f9c2ff',

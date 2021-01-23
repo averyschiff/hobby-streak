@@ -6,9 +6,10 @@ const SET_TASKS = 'SET_TASKS'
 const TOGGLE_TASK = 'TOGGLE_TASK'
 const ADD_TASK = 'ADD_TASK'
 const REMOVE_TASK = 'REMOVE_TASK'
+const SET_NOTE = 'SET_NOTE'
 
 const DEFAULT_TASKS = [
-	"Unfucked", 
+	"Cleaned", 
 	"Built", 
 	"Primed", 
 	"Basecoat", 
@@ -42,6 +43,11 @@ export const toggleTask = (task_id, value) => ({
 export const removeTask = (task_id) => ({
 	type: REMOVE_TASK,
 	task_id,
+})
+
+export const setNote = (note) => ({
+	type: SET_NOTE,
+	note
 })
 
 export const getModel = (model_id) => {
@@ -119,6 +125,23 @@ export const deleteTask = (task_id)=>{
 	}
 }
 
+export const updateNote = async (note, model_id) => {
+	console.log('Note: ' + note)
+	await models.updateModelNote(note, model_id,
+		(_, rows) => {
+			models.getModel(model_id,
+				(_, {rows}) => {
+					console.log(rows)
+				},
+				(_, {err}) => {
+					console.log('fucky wucky: ' + err)
+				}
+			)
+		},
+		(_, err)=> {alert('Error updating note: ') + err}
+	)
+}
+
 const initialModel = {
 	model: {},
 	tasks: [],
@@ -180,6 +203,14 @@ export default function (state=initialModel, action){
 					}
 				}),
 				progress: oldLength>1?newProgress/(oldLength-1):0
+			}
+		case SET_NOTE:
+			return {
+				...state,
+				model: {
+					...state.model,
+					note: action.note
+				}
 			}
 		default:
 			return state

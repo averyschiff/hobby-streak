@@ -14,12 +14,12 @@ function newModel(modelName, unit_id, army_id, callback, errorHandler){
   )
 }
 
-function updateModel(updateString, model_id, callback, errorHandler){
+function updateModelNote(note, model_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"UPDATE models SET ? WHERE id = ?",
-				[updateString, model_id],
+				"UPDATE models SET note = ? WHERE id = ?",
+				[note, model_id],
 				callback,
 				errorHandler
 			)
@@ -118,7 +118,7 @@ function deleteModelsByArmy(army_id, callback, errorHandler){
 }
 export default{
 	newModel,
-	updateModel,
+	updateModelNote,
 	getModel,
 	getModelsByUnit,
 	getModelsByArmy,

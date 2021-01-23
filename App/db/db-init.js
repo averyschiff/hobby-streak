@@ -6,10 +6,9 @@ function clearTables(){
 		tx.executeSql("DROP TABLE armies")
 		tx.executeSql("DROP TABLE units")
 		tx.executeSql("DROP TABLE models")
-		tx.executeSql("DROP TABLE tasks")
+		//tx.executeSql("DROP TABLE tasks")
 	})
 }
-
 
 const createSampleTable = (sample, insert, insertArr, callback) => {
 	if (sample){
@@ -98,6 +97,7 @@ function createModelTable(callback,sample=false){
 				"NOT NULL, " +
 			"completion REAL " +
 				"DEFAULT 0.0 CHECK (completion >= 0.0 AND completion <= 1.0), " +
+			"note TEXT, " +
 			"army_id INTEGER " +
 				"NOT NULL, " +
 			"unit_id INTEGER " +
@@ -147,7 +147,7 @@ function createTaskTable(callback,sample=false){
 		"(?, 1, 1, 1), "+
 		"(?, 1, 1, 1), "+
 		"(?, 1, 1, 1)"
-	const insertTaskArr = ["Unfucked", "Built", "Primed", "Basecoat", "Painted", "Based", "Magnetized", "Lacquered"]
+	const insertTaskArr = ["Cleaned", "Built", "Primed", "Basecoat", "Painted", "Based", "Magnetized", "Lacquered"]
 	createTable(sample, createTasks, insertTask, insertTaskArr, callback)
 }
 

@@ -1,14 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import * as SQLite from 'expo-sqlite'
-const db = SQLite.openDatabase('hobby.db');
-import styles from './styles'
+import { Text, View } from 'react-native';
 import {Provider} from 'react-redux'
-
 import {dbInit} from "./db"
 import SingleModel from "./Components/SingleModel"
 import store from './store'
+import {MenuProvider} from 'react-native-popup-menu'
 
 
 export default class App extends React.Component{
@@ -27,17 +23,23 @@ export default class App extends React.Component{
 		})
 	}
 
+	dbTest = () => {
+		//dbInit.testArmyTable()
+		//dbInit.testUnitTable()
+		dbInit.testModelTable()
+		//dbInit.testTaskTable()
+	}
+
 	//Create databases if non-existent
-	loadTables = async () => {
+	loadTables = () => {
+
 		dbInit.clearTables()
 		dbInit.createArmyTable(this.incrementTables,true)
 		dbInit.createUnitTable(this.incrementTables,true)
-		dbInit.createModelTable(this.incrementTables,true)
+		dbInit.createModelTable(this.incrementTables,false)
 		dbInit.createTaskTable(this.incrementTables,false)
-		//dbInit.testArmyTable()
-		//dbInit.testUnitTable()
-		//dbInit.testModelTable()
-		//dbInit.testTaskTable()
+
+		this.dbTest()
 	}
 
 	componentDidMount(){
@@ -48,7 +50,9 @@ export default class App extends React.Component{
 		if (this.state.tables>=4){
 			return (
 				<Provider store={store}>
-						<SingleModel model_id={1} unitName={"Mork's Mighty Mushroom"}/>
+						<MenuProvider>
+							<SingleModel model_id={1} unitName={"Mork's Mighty Mushroom"}/>
+						</MenuProvider>
 				</Provider>
 			)
 		}else{

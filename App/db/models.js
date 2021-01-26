@@ -27,6 +27,19 @@ function updateModelNote(note, model_id, callback, errorHandler){
 	)
 }
 
+function updateModelTags(tags, model_id, callback, errorHandler){
+	db.transaction(
+		tx=>{
+			tx.executeSql(
+				"UPDATE models SET tags = ? where id = ?",
+				[tags, model_id],
+				callback,
+				errorHandler
+			)
+		}
+	)
+}
+
 function getModel(model_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
@@ -119,6 +132,7 @@ function deleteModelsByArmy(army_id, callback, errorHandler){
 export default{
 	newModel,
 	updateModelNote,
+	updateModelTags,
 	getModel,
 	getModelsByUnit,
 	getModelsByArmy,

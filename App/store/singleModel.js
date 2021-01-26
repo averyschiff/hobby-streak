@@ -1,4 +1,3 @@
-import { ActionSheetIOS } from "react-native"
 import {models, tasks} from "../db/"
 
 const SET_MODEL = 'SET_MODEL'
@@ -7,6 +6,7 @@ const TOGGLE_TASK = 'TOGGLE_TASK'
 const ADD_TASK = 'ADD_TASK'
 const REMOVE_TASK = 'REMOVE_TASK'
 const SET_NOTE = 'SET_NOTE'
+const SET_TAGS = 'SET_TAGS'
 
 const DEFAULT_TASKS = [
 	"Cleaned", 
@@ -48,6 +48,11 @@ export const removeTask = (task_id) => ({
 export const setNote = (note) => ({
 	type: SET_NOTE,
 	note
+})
+
+export const setTags = (tags) => ({
+	type: SET_TAGS,
+	tags
 })
 
 export const getModel = (model_id) => {
@@ -128,37 +133,53 @@ export const deleteTask = (task_id)=>{
 export const updateNote = async (note, model_id) => {
 	await models.updateModelNote(note, model_id,
 		null,
-		(_, err)=> {alert('Error updating note: ') + err}
+		(_, err)=> {alert('Error updating note: ' + err)}
 	)
+}
+
+export const updateTags = (tags, model_id) => {
+	return async dispatch => {
+		await models.updateModelTags(tags, model_id,
+			(_, rows) => {
+				dispatch(setTags(tags))
+			},
+			(_, err)=> {console.log('Error updating note: ' + err)}
+		)
+	}
 }
 
 const initialModel = {
 	model: {},
 	tasks: [],
 	progress: 0,
+	text: '',
+	tags: '',
 }
 
 export default function (state=initialModel, action){
 	let newProgress = 0
 	let oldLength = state.tasks.length
 	switch (action.type){
+
 		case SET_MODEL:
 			return {
 				...state,
 				model: action.model
 			}
+
 		case SET_TASKS:
 			return {
 				...state,
 				tasks: action.tasks.map(task =>{
 					if (task.complete) newProgress++
 					return {
-					...task,
-					complete: task.complete==0?false:true
+						...task,
+						complete: task.complete==0?false:true
 					}
 				}),
 				progress: newProgress/action.tasks.length
 			}
+
 		case ADD_TASK:
 			newProgress = state.progress*oldLength/(oldLength+1)
 			return {
@@ -169,6 +190,7 @@ export default function (state=initialModel, action){
 				],
 				progress: newProgress,
 			}
+
 		case TOGGLE_TASK:
 			if (action.value) newProgress = state.progress + 1/state.tasks.length
 			else newProgress = state.progress - 1/state.tasks.length
@@ -181,6 +203,7 @@ export default function (state=initialModel, action){
 				}),
 				progress: newProgress
 			}
+
 		case REMOVE_TASK:
 			return {
 				...state,
@@ -194,6 +217,7 @@ export default function (state=initialModel, action){
 				}),
 				progress: oldLength>1?newProgress/(oldLength-1):0
 			}
+
 		case SET_NOTE:
 			return {
 				...state,
@@ -202,6 +226,13 @@ export default function (state=initialModel, action){
 					note: action.note
 				}
 			}
+		
+		case SET_TAGS:
+			return {
+				...state,
+				tags: state.tags,
+			}
+
 		default:
 			return state
 	}

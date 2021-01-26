@@ -5,7 +5,7 @@ function clearTables(){
 	db.transaction(tx => {
 		tx.executeSql("DROP TABLE armies")
 		tx.executeSql("DROP TABLE units")
-		tx.executeSql("DROP TABLE models")
+		//tx.executeSql("DROP TABLE models")
 		//tx.executeSql("DROP TABLE tasks")
 	})
 }
@@ -98,6 +98,7 @@ function createModelTable(callback,sample=false){
 			"completion REAL " +
 				"DEFAULT 0.0 CHECK (completion >= 0.0 AND completion <= 1.0), " +
 			"note TEXT, " +
+			"tags TEXT, " +
 			"army_id INTEGER " +
 				"NOT NULL, " +
 			"unit_id INTEGER " +

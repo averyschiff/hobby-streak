@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import styles from '../styles.js'
-import {Text, View, FlatList, TextInput, KeyboardAvoidingView, Platform} from 'react-native'
+import {Text, View, FlatList, KeyboardAvoidingView, Button, TextInput} from 'react-native'
 import {
 	getModel, 
 	getTasks, 
@@ -9,10 +9,13 @@ import {
 	deleteTask, 
 	createTask,
 	setNote,
-	updateNote} from '../store/singleModel'
+	updateNote,
+	updateTags,
+} from '../store/singleModel'
 import ProgressBar from 'react-native-progress/Bar'
 import Task from './Task'
-
+import NoteBox from './NoteBox'
+import TagsMenu from './TagsMenu'
 
 export class SingleModel extends React.Component{
 	async componentDidMount(){
@@ -43,13 +46,16 @@ export class SingleModel extends React.Component{
 					behavior="position"
 				>
 					<View style={styles.singleModel}>
+
 						<View style={styles.modelText}>
 							<Text style={styles.modelName}>{this.props.model.modelName}</Text>
 							<Text>{this.props.unitName}</Text>
 						</View>
+
 						<ProgressBar progress={this.props.progress} width={300}/>
+
 						<View
-						style={{height: 300}}
+							style={{height: 300}}
 						>
 							<FlatList
 								data={[...this.props.tasks,
@@ -65,26 +71,15 @@ export class SingleModel extends React.Component{
 								removeClippedSubviews={false}
 							/>
 						</View>
-						<View>
-						<TextInput
-						style={{
-							height: 200,
-							borderColor: 'black',
-							borderWidth: 1,
-							width: 300,
-							padding: 10,
-							//THIS WILL BREAK IN IOS
-							textAlignVertical: 'top'
-						}}
-						placeholder={"Notes..."}
-						multiline={true}
-						value={this.props.model.note}
-						onChangeText = {text=>{this.props.setNote(text)}}
-						onEndEditing={()=>{
-							updateNote(this.props.model.note, this.props.model.id)
-						}}
+						<NoteBox
+							note={this.props.model.note}
+							setNote={this.props.setNote}
+							updateNote={(note)=>updateNote(note, this.props.model.id)}
 						/>
-						</View>
+						<TagsMenu
+							updateTags={(tags)=>this.props.updateTags(tags, this.props.model.id)}
+							oldTags={this.props.model.tags}
+						/>
 					</View>
 				</KeyboardAvoidingView>):
 				(<View><Text>Single Model View</Text></View>)
@@ -116,7 +111,10 @@ const mapDispatch = dispatch => ({
 	},
 	setNote: (note)=>{
 		dispatch(setNote(note))
-	}
+	},
+	updateTags: (tags, model_id)=>{
+		dispatch(updateTags(tags, model_id))
+	},
 })
 
 export default connect(mapState, mapDispatch)(SingleModel)

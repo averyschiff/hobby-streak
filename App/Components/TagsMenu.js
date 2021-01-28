@@ -6,9 +6,10 @@ const {SlideInMenu} = renderers;
 const TagsMenu = (props) => {
   const [newTags, onChangeText] = React.useState('');
 
-  const submitTags = (value, tags) => {
+  const submitTags = async (value, tags) => {
     if (value){
-      props.updateTags(props.oldTags + tags)
+      if (props.oldTags) props.updateTags(props.oldTags + tags +', ')
+      else props.updateTags(tags+', ')
       onChangeText('')
     }
   }

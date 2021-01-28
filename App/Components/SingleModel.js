@@ -1,7 +1,13 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import styles from '../styles.js'
-import {Text, View, FlatList, KeyboardAvoidingView, Button, TextInput} from 'react-native'
+import {
+	Text, 
+	View, 
+	FlatList, 
+	KeyboardAvoidingView, 
+	ScrollView
+} from 'react-native'
 import {
 	getModel, 
 	getTasks, 
@@ -16,6 +22,7 @@ import ProgressBar from 'react-native-progress/Bar'
 import Task from './Task'
 import NoteBox from './NoteBox'
 import TagsMenu from './TagsMenu'
+import TagList from './TagsList'
 
 export class SingleModel extends React.Component{
 	async componentDidMount(){
@@ -43,9 +50,12 @@ export class SingleModel extends React.Component{
 		return(
 			this.props.model.modelName?
 				(<KeyboardAvoidingView 
-					behavior="position"
+					behavior="height"
 				>
-					<View style={styles.singleModel}>
+					<ScrollView 
+						style={styles.singleModel}
+						contentContainerStyle={{alignItems: 'center'}}
+					>
 
 						<View style={styles.modelText}>
 							<Text style={styles.modelName}>{this.props.model.modelName}</Text>
@@ -69,6 +79,7 @@ export class SingleModel extends React.Component{
 								columnWrapperStyle={styles.taskList}
 								numColumns={2}
 								removeClippedSubviews={false}
+								nestedScrollEnabled={true}
 							/>
 						</View>
 						<NoteBox
@@ -76,11 +87,12 @@ export class SingleModel extends React.Component{
 							setNote={this.props.setNote}
 							updateNote={(note)=>updateNote(note, this.props.model.id)}
 						/>
+						<TagList tagList={this.props.model.tags}/>
 						<TagsMenu
 							updateTags={(tags)=>this.props.updateTags(tags, this.props.model.id)}
 							oldTags={this.props.model.tags}
 						/>
-					</View>
+					</ScrollView>
 				</KeyboardAvoidingView>):
 				(<View><Text>Single Model View</Text></View>)
 			)

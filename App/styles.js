@@ -8,7 +8,6 @@ export default styles = StyleSheet.create({
 	},
 	singleModel: {
 		//backgroundColor: '#fff',
-		alignItems: 'center'
 	},
 	modelText: {
 		marginBottom: 10,

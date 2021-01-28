@@ -152,8 +152,6 @@ const initialModel = {
 	model: {},
 	tasks: [],
 	progress: 0,
-	text: '',
-	tags: '',
 }
 
 export default function (state=initialModel, action){
@@ -230,7 +228,10 @@ export default function (state=initialModel, action){
 		case SET_TAGS:
 			return {
 				...state,
-				tags: state.tags,
+				model: {
+					...state.model,
+					tags: action.tags
+				},
 			}
 
 		default:

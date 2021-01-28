@@ -6,7 +6,7 @@ const NoteBox = (props) => {
     <View>
       <TextInput
         style={{
-          height: 200,
+          height: 100,
           borderColor: 'black',
           borderWidth: 1,
           width: 300,

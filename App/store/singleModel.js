@@ -143,7 +143,9 @@ export const updateTags = (tags, model_id) => {
 			(_, rows) => {
 				dispatch(setTags(tags))
 			},
-			(_, err)=> {console.log('Error updating note: ' + err)}
+			(_, err)=> {
+				console.log('Error updating note: ' + err)
+			}
 		)
 	}
 }

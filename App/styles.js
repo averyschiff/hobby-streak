@@ -18,6 +18,7 @@ export default styles = StyleSheet.create({
 	},
 	taskList:{
 		flex: 1,
+		alignItems: "center",
 		alignContent: 'flex-start',
 		width: 300, 
 	},

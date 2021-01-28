@@ -1,6 +1,11 @@
 import React from 'react'
 import { View, Text, TextInput } from 'react-native'
-import Menu, {MenuOptions, MenuOption, MenuTrigger, renderers} from 'react-native-popup-menu'
+import Menu, {
+  MenuOptions, 
+  MenuOption, 
+  MenuTrigger, 
+  renderers
+} from 'react-native-popup-menu'
 const {SlideInMenu} = renderers;
 
 const TagsMenu = (props) => {

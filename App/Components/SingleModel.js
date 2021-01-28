@@ -5,8 +5,6 @@ import {
 	Text, 
 	View, 
 	FlatList, 
-	KeyboardAvoidingView, 
-	ScrollView
 } from 'react-native'
 import {
 	getModel, 
@@ -49,64 +47,77 @@ export class SingleModel extends React.Component{
 	render(){
 		return(
 			this.props.model.modelName?
-				(<KeyboardAvoidingView 
-					behavior="height"
-				>
-					<ScrollView 
-						style={styles.singleModel}
-						contentContainerStyle={{alignItems: 'center'}}
-					>
-
-						<View style={styles.modelText}>
-							<Text style={styles.modelName}>{this.props.model.modelName}</Text>
-							<Text>{this.props.unitName}</Text>
-						</View>
-
-						<ProgressBar progress={this.props.progress} width={300}/>
-
-						<View
-							style={{height: 300}}
-						>
-							<FlatList
-								data={[...this.props.tasks,
-									{task: '',
-									id: -1,
-									complete: false,
+							(
+								<View
+								style={
+									{
+										alignItems:"center",
 									}
-								]}
-								renderItem ={this.renderItem}
-								keyExtractor={item=>item.id.toString()}
-								columnWrapperStyle={styles.taskList}
-								numColumns={2}
-								removeClippedSubviews={false}
-								nestedScrollEnabled={true}
-							/>
-						</View>
-						<NoteBox
-							note={this.props.model.note}
-							setNote={this.props.setNote}
-							updateNote={(note)=>updateNote(note, this.props.model.id)}
-						/>
-						<TagList tagList={this.props.model.tags}/>
-						<TagsMenu
-							updateTags={(tags)=>this.props.updateTags(tags, this.props.model.id)}
-							oldTags={this.props.model.tags}
-						/>
-					</ScrollView>
-				</KeyboardAvoidingView>):
-				(<View><Text>Single Model View</Text></View>)
-			)
+								}
+								>
+							<FlatList
+							showsVerticalScrollIndicator={false}
+							ListHeaderComponent={
+								<View style={{
+									alignItems: "center"
+								}}>
+									<View style={styles.modelText}>
+										<Text style={styles.modelName}>{this.props.model.modelName}</Text>
+										<Text>{this.props.unitName}</Text>
+									</View>
+
+									<ProgressBar progress={this.props.progress} width={300}/>
+								</View>
+								}
+									data={[...this.props.tasks,
+										{task: '',
+										id: -1,
+										complete: false,
+										}
+									]}
+									renderItem ={this.renderItem}
+									keyExtractor={item=>item.id.toString()}
+									columnWrapperStyle={styles.taskList}
+									numColumns={2}
+									removeClippedSubviews={false}
+									nestedScrollEnabled={true}
+									ListFooterComponent={
+										<View
+										style={{alignItems: "center"}}
+										>
+											<NoteBox
+												note={this.props.model.note}
+												setNote={this.props.setNote}
+												updateNote={(note)=>updateNote(note, this.props.model.id)}
+											/>
+											<TagList 
+												tagList={this.props.model.tags}
+												updateTags={(tags)=>{
+													this.props.updateTags(tags, this.props.model.id)}
+												}
+											/>
+											<TagsMenu
+												updateTags={(tags)=>this.props.updateTags(tags, this.props.model.id)}
+												oldTags={this.props.model.tags}
+											/>
+										</View>
+									}
+								/>
+								</View>
+								):
+					(<View><Text>Single Model View</Text></View>)
+				)
+		}
 	}
-}
 
-const mapState = state => ({
-	model: state.singleModel.model,
-	tasks: state.singleModel.tasks,
-	progress: state.singleModel.progress,
-})
+	const mapState = state => ({
+		model: state.singleModel.model,
+		tasks: state.singleModel.tasks,
+		progress: state.singleModel.progress,
+	})
 
-const mapDispatch = dispatch => ({
-	getModel: (model_id)=>{
+	const mapDispatch = dispatch => ({
+		getModel: (model_id)=>{
 		dispatch(getModel(model_id))
 	},
 	getTasks: (model_id)=>{

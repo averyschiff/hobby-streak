@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, Text, TouchableOpacity, ImagePropTypes} from 'react-native'
+import {View} from 'react-native'
 import Menu, {
   MenuOptions,
   MenuOption,

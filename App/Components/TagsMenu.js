@@ -12,10 +12,12 @@ const TagsMenu = (props) => {
   const [newTags, onChangeText] = React.useState('');
 
   const submitTags = async (value, tags) => {
-    if (value){
-      if (props.oldTags) props.updateTags(props.oldTags + tags +', ')
-      else props.updateTags(tags+', ')
-      onChangeText('')
+    if (tags.length>0){
+      if (value){
+        if (props.oldTags) props.updateTags(props.oldTags + tags +', ')
+        else props.updateTags(tags+', ')
+        onChangeText('')
+      }
     }
   }
   return (

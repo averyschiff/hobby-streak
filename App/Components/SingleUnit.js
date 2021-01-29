@@ -9,6 +9,7 @@ import {
 import {getUnit, getModels} from '../store/singleUnit'
 import { render } from 'react-dom'
 import styles from '../styles'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export class SingleUnit extends React.Component{
   async componentDidMount(){
@@ -17,7 +18,16 @@ export class SingleUnit extends React.Component{
   }
 
   renderItem = ({item}) => (
-    <Text>{item.modelName}</Text>
+    <TouchableOpacity
+      onPress={()=>{
+        this.props.navigation.navigate(
+          'Model',
+          {model_id: item.id, unitName: this.props.unit.unitName}
+        )
+      }}
+    >
+      <Text>{item.modelName}</Text>
+    </TouchableOpacity>
   )
 
   render(){

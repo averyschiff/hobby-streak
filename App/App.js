@@ -49,12 +49,18 @@ export default class App extends React.Component{
 	}
 
 	render(){
+		const Stack = createStackNavigator();
 		if (this.state.tables>=4){
 			return (
 				<Provider store={store}>
 						<MenuProvider>
 							<NavigationContainer>
-								<SingleUnit unit_id={1}/>
+								<Stack.Navigator initialRouteName="Unit">
+									<Stack.Screen name="Unit">
+										{props=> <SingleUnit {...props} unit_id={1}/>}
+									</Stack.Screen>
+									<Stack.Screen name="Model" component={SingleModel}/>
+								</Stack.Navigator>
 							</NavigationContainer>
 						</MenuProvider>
 				</Provider>

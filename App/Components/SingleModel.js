@@ -23,9 +23,16 @@ import TagsMenu from './TagsMenu'
 import TagList from './TagsList'
 
 export class SingleModel extends React.Component{
+
+	constructor(props){
+		super(props)
+		this.model_id = this.props.route.params.model_id
+		this.unitName = this.props.route.params.unitName
+	}
+
 	async componentDidMount(){
-		await this.props.getModel(this.props.model_id)
-		await this.props.getTasks(this.props.model_id)
+		await this.props.getModel(this.model_id)
+		await this.props.getTasks(this.model_id)
 	}
 
 	renderItem = ({item}) => (
@@ -36,7 +43,7 @@ export class SingleModel extends React.Component{
 		deleteTask={this.props.deleteTask}
 		createTask={(taskName) => this.props.createTask(
 			taskName,
-			this.props.model.id,
+			this.model_id,
 			this.props.model.unit_id,
 			this.props.model.army_id,
 		)}
@@ -63,7 +70,7 @@ export class SingleModel extends React.Component{
 								}}>
 									<View style={styles.modelText}>
 										<Text style={styles.modelName}>{this.props.model.modelName}</Text>
-										<Text>{this.props.unitName}</Text>
+										<Text>{this.unitName}</Text>
 									</View>
 
 									<ProgressBar progress={this.props.progress} width={300}/>

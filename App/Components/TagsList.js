@@ -13,7 +13,9 @@ const TagsList = (props) => {
     props.updateTags(newTags)
   }
 
-  const allTags = props.tagList.split(', ').slice(0,-1)
+  let allTags
+  if (props.tagList) allTags = props.tagList.split(', ').slice(0,-1)
+  else allTags = []
 
   let rowLength = 4
   let count = 0

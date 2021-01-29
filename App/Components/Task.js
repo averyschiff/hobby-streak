@@ -2,6 +2,11 @@ import React from 'react'
 import {Text, View, Button, TextInput} from 'react-native'
 import styles from '../styles.js'
 import CheckBox from '@react-native-community/checkbox'
+import Menu, {
+  MenuOptions,
+  MenuOption,
+  MenuTrigger
+} from 'react-native-popup-menu'
 
 export default Task = ({task, id, complete, updateTask, deleteTask, createTask}) => {
 	const [newTask, onChangeText] = React.useState('');
@@ -21,10 +26,29 @@ export default Task = ({task, id, complete, updateTask, deleteTask, createTask})
 					/>
 					<Text style={styles.task}>{task}</Text>
 				</View>
-				<Button
-				title='x'
-				onPress={()=>deleteTask(id)}
-				/>
+				<Menu onSelect={
+					value=>{
+						if (value) {
+							deleteTask(id)
+						}
+					}
+				}>
+					<MenuTrigger>
+						<View
+							style={{
+								padding: 3,
+								margin: 3,
+							}}
+						>
+							<Text>x</Text>
+						</View>
+					</MenuTrigger>
+					<MenuOptions>
+						<MenuOption value={true} text={`Delete "${task}"`} />
+						<MenuOption value={false} text='Cancel'/>
+					</MenuOptions>
+			</Menu>
+
 			</View>
 			):
 			(<View style={{

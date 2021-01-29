@@ -57,7 +57,7 @@ function getModelsByUnit(unit_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"SELECT * FROM models WHERE unit_id = ?",
+				"SELECT id, modelName, completion FROM models WHERE unit_id = ?",
 				[unit_id],
 				callback,
 				errorHandler

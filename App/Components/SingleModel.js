@@ -110,14 +110,14 @@ export class SingleModel extends React.Component{
 		}
 	}
 
-	const mapState = state => ({
-		model: state.singleModel.model,
-		tasks: state.singleModel.tasks,
-		progress: state.singleModel.progress,
-	})
+const mapState = state => ({
+	model: state.singleModel.model,
+	tasks: state.singleModel.tasks,
+	progress: state.singleModel.progress,
+})
 
-	const mapDispatch = dispatch => ({
-		getModel: (model_id)=>{
+const mapDispatch = dispatch => ({
+	getModel: (model_id)=>{
 		dispatch(getModel(model_id))
 	},
 	getTasks: (model_id)=>{

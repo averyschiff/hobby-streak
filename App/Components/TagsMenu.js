@@ -29,8 +29,10 @@ const TagsMenu = (props) => {
         <View>
           <TextInput
             style={{
-              height: 30,
+              height: 50,
               width: 350,
+              paddingLeft: 4,
+              marginLeft: 4,
               borderWidth: 1,
               borderColor: 'black'
             }}
@@ -39,8 +41,12 @@ const TagsMenu = (props) => {
             onChangeText={text=>onChangeText(text)}
           />
         </View>
-        <MenuOption value={true} text='Submit'/>
-        <MenuOption value={false} text='Cancel'/>
+        <MenuOption 
+          style={{height: 30}}
+          value={true} text='Submit'/>
+        <MenuOption 
+          style={{height: 30}}
+          value={false} text='Cancel'/>
       </MenuOptions>
     </Menu>
   )

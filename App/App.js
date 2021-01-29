@@ -3,9 +3,11 @@ import { Text, View } from 'react-native';
 import {Provider} from 'react-redux'
 import {dbInit} from "./db"
 import SingleModel from "./Components/SingleModel"
+import SingleUnit from "./Components/SingleUnit"
 import store from './store'
 import {MenuProvider} from 'react-native-popup-menu'
-
+import {NavigationContainer} from '@react-navigation/native'
+import {createStackNavigator} from '@react-navigation/stack'
 
 export default class App extends React.Component{
 
@@ -51,7 +53,9 @@ export default class App extends React.Component{
 			return (
 				<Provider store={store}>
 						<MenuProvider>
-							<SingleModel model_id={1} unitName={"Mork's Mighty Mushroom"}/>
+							<NavigationContainer>
+								<SingleUnit unit_id={1}/>
+							</NavigationContainer>
 						</MenuProvider>
 				</Provider>
 			)

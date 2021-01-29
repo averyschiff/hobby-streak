@@ -1,5 +1,5 @@
 import React from 'react'
-import {View} from 'react-native'
+import {View, Text} from 'react-native'
 import Menu, {
   MenuOptions,
   MenuOption,
@@ -8,17 +8,6 @@ import Menu, {
 
 const Tag = (props) => {
   return(
-    <View
-      style={{
-        padding: 3,
-        margin: 3,
-        borderColor: "blue",
-        borderWidth: 1,
-        borderRadius: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-      }}
-    >
     <Menu onSelect={
       value=>{
         if (value) {
@@ -26,24 +15,27 @@ const Tag = (props) => {
         }
       }
       }>
-      <MenuTrigger text={props.tag}/>
+      <MenuTrigger>
+        <View
+          style={{
+            padding: 3,
+            margin: 3,
+            borderColor: "blue",
+            borderWidth: 1,
+            borderRadius: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <Text>{props.tag}</Text>
+        </View>
+      </MenuTrigger>
       <MenuOptions>
         <MenuOption value={true} text='Delete' />
         <MenuOption value={false} text='Cancel'/>
       </MenuOptions>
     </Menu>
-    </View>
   )
 }
 
 export default Tag
-
-/*
-
-      <TouchableOpacity
-      onPress={()=>{console.log('pressed')}}>
-        <Text style={{
-          paddingHorizontal: 2
-        }}>x</Text>
-      </TouchableOpacity>
-      */

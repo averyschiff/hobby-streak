@@ -2,6 +2,7 @@ import {units, models} from "../db"
 
 const SET_UNIT = 'SET_UNIT'
 const SET_MODELS = 'SET_MODELS'
+const ADD_MODEL = 'ADD_MODEL'
 
 export const setUnit = (unit) => ({
   type: SET_UNIT,
@@ -11,6 +12,11 @@ export const setUnit = (unit) => ({
 export const setModels = (models) => ({
   type: SET_MODELS,
   models
+})
+
+export const addModel = (model) => ({
+  type: ADD_MODEL,
+  model
 })
 
 export const getUnit = (unit_id) => {
@@ -53,7 +59,14 @@ export default function (state=initialUnit, action){
         ...state,
         models: action.models
       }
-
+    case ADD_MODEL:
+      return {
+        ...state,
+        models: [
+          ...state.models,
+          action.model
+        ],
+      }
     default:
       return state
   }

@@ -3,18 +3,35 @@ import {connect} from 'react-redux'
 import {
 	Text, 
 	View, 
-	FlatList, 
+  FlatList, 
+  Modal,
+  Button,
 } from 'react-native'
 
 import {getUnit, getModels} from '../store/singleUnit'
-import { render } from 'react-dom'
 import styles from '../styles'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import NewItemForm from './NewItemForm'
 
 export class SingleUnit extends React.Component{
+
+  constructor(props){
+    super(props)
+    this.state = {
+      modalType: null,
+      modalVisible: false
+    }
+    this.cancelModal = this.cancelModal.bind(this)
+  }
   async componentDidMount(){
     await this.props.getUnit(this.props.unit_id)
     await this.props.getModels(this.props.unit_id)
+  }
+
+  cancelModal = () =>{
+    this.setState({
+      modalVisible: false
+    })
   }
 
   renderItem = ({item}) => (
@@ -33,14 +50,35 @@ export class SingleUnit extends React.Component{
   render(){
     return(
       this.props.unit.unitName?
-      (<View
-      >
-        <Text style={styles.modelName}>{this.props.unit.unitName}</Text>
-        <FlatList
-          data = {this.props.models}
-          renderItem={this.renderItem}
-          keyExtractor={item=>item.id.toString()}
-        />
+      (
+      <View>
+        <Modal
+          animationType="fade"
+          transparent={false}
+          visible={this.state.modalVisible}
+        >
+          <NewItemForm 
+            defaultName={
+              `${this.props.unit.unitName} ${this.props.models.length+1}`
+            }
+            cancelModal={this.cancelModal}
+          />
+        </Modal>
+        <View>
+          <Text style={styles.modelName}>{this.props.unit.unitName}</Text>
+          <FlatList
+            data = {this.props.models}
+            renderItem={this.renderItem}
+            keyExtractor={item=>item.id.toString()}
+          />
+          <Button
+            title='New model'
+            onPress={()=>this.setState({
+              modalVisible: true
+            })
+            }
+          />
+        </View>
       </View>):
       (<View>
         <Text>Single unit view</Text>

@@ -8,7 +8,11 @@ import {
   Button,
 } from 'react-native'
 
-import {getUnit, getModels} from '../store/singleUnit'
+import {
+  getUnit, 
+  getModels,
+  createModel,
+} from '../store/singleUnit'
 import styles from '../styles'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import NewItemForm from './NewItemForm'
@@ -22,6 +26,7 @@ export class SingleUnit extends React.Component{
       modalVisible: false
     }
     this.cancelModal = this.cancelModal.bind(this)
+    this.newModel = this.newModel.bind(this)
   }
   async componentDidMount(){
     await this.props.getUnit(this.props.unit_id)
@@ -32,6 +37,14 @@ export class SingleUnit extends React.Component{
     this.setState({
       modalVisible: false
     })
+  }
+
+  newModel = (modelName) => {
+    this.props.createModel(
+      modelName, 
+      this.props.unit.id, 
+      this.props.unit.army_id
+    )
   }
 
   renderItem = ({item}) => (
@@ -59,9 +72,10 @@ export class SingleUnit extends React.Component{
         >
           <NewItemForm 
             defaultName={
-              `${this.props.unit.unitName} ${this.props.models.length+1}`
+              `Model ${this.props.models.length+1}`
             }
             cancelModal={this.cancelModal}
+            newItem={this.newModel}
           />
         </Modal>
         <View>
@@ -100,6 +114,9 @@ const mapDispatch = dispatch => ({
   },
   getModels: (unit_id)=>{
     dispatch(getModels(unit_id))
+  },
+  createModel: (modelName, unit_id, army_id)=>{
+    dispatch(createModel(modelName, unit_id, army_id))
   }
 })
 

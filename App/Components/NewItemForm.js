@@ -35,6 +35,12 @@ const NewItemForm = (props) => {
       }}>
         <Button
           title="Submit"
+          onPress={
+            ()=>{
+              props.newItem(newName)
+              props.cancelModal()
+            }
+          }
         />
         <Button
           title="Cancel"

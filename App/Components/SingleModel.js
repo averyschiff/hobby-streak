@@ -136,8 +136,8 @@ const mapDispatch = dispatch => ({
 	deleteTask: (task_id)=>{
 		dispatch(deleteTask(task_id))
 	},
-	createTask: (task_id, model_id, unit_id, army_id)=>{
-		dispatch(createTask(task_id, model_id, unit_id, army_id))
+	createTask: (taskName, model_id, unit_id, army_id)=>{
+		dispatch(createTask(taskName, model_id, unit_id, army_id))
 	},
 	setNote: (note)=>{
 		dispatch(setNote(note))

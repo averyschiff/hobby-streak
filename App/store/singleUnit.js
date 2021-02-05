@@ -3,6 +3,7 @@ import {units, models} from "../db"
 const SET_UNIT = 'SET_UNIT'
 const SET_MODELS = 'SET_MODELS'
 const ADD_MODEL = 'ADD_MODEL'
+const REMOVE_MODEL = 'REMOVE_MODEL'
 
 export const setUnit = (unit) => ({
   type: SET_UNIT,
@@ -17,6 +18,11 @@ export const setModels = (models) => ({
 export const addModel = (model) => ({
   type: ADD_MODEL,
   model
+})
+
+export const removeModel = (model_id) => ({
+  type: REMOVE_MODEL,
+  model_id
 })
 
 export const getUnit = (unit_id) => {
@@ -55,6 +61,17 @@ export const createModel = (modelName, unit_id, army_id) => {
 	}
 }
 
+export const deleteModel = (model_id) => {
+  return async dispatch => {
+    await models.deleteModel(model_id,
+      (_, {}) => {
+        dispatch(removeModel(model_id))
+      },
+      (_, err) => {alert('Error deleting model: ' + err)}
+    )
+  }
+}
+
 const initialUnit = {
   unit: {},
   models: [],
@@ -80,6 +97,13 @@ export default function (state=initialUnit, action){
           ...state.models,
           action.model
         ],
+      }
+    case REMOVE_MODEL:
+      return {
+        ...state,
+        models: state.models.filter(model=>{
+          return model.id!=action.model_id
+        })
       }
     default:
       return state

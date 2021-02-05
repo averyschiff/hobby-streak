@@ -5,7 +5,7 @@ function clearTables(){
 	db.transaction(tx => {
 		tx.executeSql("DROP TABLE armies")
 		tx.executeSql("DROP TABLE units")
-		tx.executeSql("DROP TABLE models")
+		//tx.executeSql("DROP TABLE models")
 		//tx.executeSql("DROP TABLE tasks")
 	})
 }

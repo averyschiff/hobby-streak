@@ -7,15 +7,22 @@ import {
   Modal,
   Button,
 } from 'react-native'
+import Menu, {
+  MenuOptions,
+  MenuOption,
+  MenuTrigger
+} from 'react-native-popup-menu'
 
 import {
   getUnit, 
   getModels,
   createModel,
+  deleteModel
 } from '../store/singleUnit'
 import styles from '../styles'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import NewItemForm from './NewItemForm'
+import { deleteTask } from '../store/singleModel'
 
 export class SingleUnit extends React.Component{
 
@@ -48,16 +55,47 @@ export class SingleUnit extends React.Component{
   }
 
   renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={()=>{
-        this.props.navigation.navigate(
-          'Model',
-          {model_id: item.id, unitName: this.props.unit.unitName}
-        )
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: 5,
       }}
     >
-      <Text>{item.modelName}</Text>
-    </TouchableOpacity>
+      <TouchableOpacity
+        onPress={()=>{
+          this.props.navigation.navigate(
+            'Model',
+            {model_id: item.id, unitName: this.props.unit.unitName}
+          )
+        }}
+      >
+        <Text style={{fontSize: 20}}>{item.modelName}</Text>
+      </TouchableOpacity>
+      <Menu onSelect={
+        value=>{
+          if(value){
+            this.props.deleteModel(item.id)
+          }
+        }
+      }>
+        <MenuTrigger>
+          <View
+            style={{
+              padding: 3,
+              margin: 3,
+            }}
+          >
+            <Text>x</Text>
+          </View>
+        </MenuTrigger>
+        <MenuOptions>
+          <MenuOption value={true} text={`Delete "${item.modelName}"?`} />
+          <MenuOption value={false} text='Cancel'/>
+        </MenuOptions>
+      </Menu>
+    </View>
   )
 
   render(){
@@ -117,7 +155,10 @@ const mapDispatch = dispatch => ({
   },
   createModel: (modelName, unit_id, army_id)=>{
     dispatch(createModel(modelName, unit_id, army_id))
-  }
+  },
+  deleteModel: (model_id)=>{
+    dispatch(deleteModel(model_id))
+  },
 })
 
 export default connect(mapState, mapDispatch)(SingleUnit)

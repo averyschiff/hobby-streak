@@ -38,7 +38,7 @@ export default class App extends React.Component{
 		dbInit.clearTables()
 		dbInit.createArmyTable(this.incrementTables,true)
 		dbInit.createUnitTable(this.incrementTables,true)
-		dbInit.createModelTable(this.incrementTables,true)
+		dbInit.createModelTable(this.incrementTables,false)
 		dbInit.createTaskTable(this.incrementTables,false)
 
 		this.dbTest()

@@ -137,11 +137,14 @@ export const updateNote = async (note, model_id) => {
 	)
 }
 
-export const updateTags = (tags, model_id) => {
+export const updateTags = (tags, oldTags, model_id) => {
+	let newTags = ''
+	if (oldTags) newTags = oldTags + tags + ', '
+	else if (tags) newTags = tags + ', '
 	return async dispatch => {
-		await models.updateModelTags(tags, model_id,
+		await models.updateModelTags(newTags, model_id,
 			(_, rows) => {
-				dispatch(setTags(tags))
+				dispatch(setTags(newTags))
 			},
 			(_, err)=> {
 				console.log('Error updating note: ' + err)

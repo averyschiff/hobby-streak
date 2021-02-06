@@ -105,7 +105,7 @@ export class SingleUnit extends React.Component{
       <View>
         <Modal
           animationType="fade"
-          transparent={false}
+          transparent={true}
           visible={this.state.modalVisible}
         >
           <NewItemForm 
@@ -114,6 +114,7 @@ export class SingleUnit extends React.Component{
             }
             cancelModal={this.cancelModal}
             newItem={this.newModel}
+            modalText={'New model name:'}
           />
         </Modal>
         <View>

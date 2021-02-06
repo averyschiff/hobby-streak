@@ -4,7 +4,8 @@ import styles from '../styles.js'
 import {
 	Text, 
 	View, 
-	FlatList, 
+	FlatList,
+	Modal, 
 } from 'react-native'
 import {
 	getModel, 
@@ -21,6 +22,8 @@ import Task from './Task'
 import NoteBox from './NoteBox'
 import TagsMenu from './TagsMenu'
 import TagList from './TagsList'
+import NewItemForm from './NewItemForm'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 export class SingleModel extends React.Component{
 
@@ -28,6 +31,12 @@ export class SingleModel extends React.Component{
 		super(props)
 		this.model_id = this.props.route.params.model_id
 		this.unitName = this.props.route.params.unitName
+		this.state = {
+			modalType: null,
+			modalVisible: false,
+		}
+    this.cancelModal = this.cancelModal.bind(this)
+		this.addTags = this.addTags.bind(this)
 	}
 
 	async componentDidMount(){
@@ -50,73 +59,111 @@ export class SingleModel extends React.Component{
 		/>
 	)
 
+  cancelModal = () =>{
+    this.setState({
+      modalVisible: false
+    })
+  }
+
+	addTags = (tags) => {
+		this.props.updateTags(
+			tags,
+			this.props.model.tags,
+			this.props.model.id
+		)
+	}
 
 	render(){
 		return(
 			this.props.model.modelName?
-							(
-								<View
-								style={
-									{
-										alignItems:"center",
-									}
-								}
-								>
-							<FlatList
-							showsVerticalScrollIndicator={false}
-							ListHeaderComponent={
-								<View style={{
-									alignItems: "center"
-								}}>
-									<View style={styles.modelText}>
-										<Text style={styles.modelName}>{this.props.model.modelName}</Text>
-										<Text>{this.unitName}</Text>
-									</View>
-
-									<ProgressBar progress={this.props.progress} width={300}/>
+				(
+				<View
+				style={
+					{
+						alignItems:"center",
+					}
+				}
+				>
+					<Modal
+						animationType="fade"
+						transparent={true}
+						visible={this.state.modalVisible}
+					>
+						<NewItemForm
+							defaultName={''}
+							cancelModal={this.cancelModal}
+							newItem={this.addTags}
+							modalText={'Enter new tags, separated by commas'}
+						/>
+					</Modal>
+					<FlatList
+						showsVerticalScrollIndicator={false}
+						ListHeaderComponent={
+							<View style={{
+								alignItems: "center"
+							}}>
+								<View style={styles.modelText}>
+									<Text style={styles.modelName}>{this.props.model.modelName}</Text>
+									<Text>{this.unitName}</Text>
 								</View>
-								}
-									data={[...this.props.tasks,
-										{task: '',
-										id: -1,
-										complete: false,
-										}
-									]}
-									renderItem ={this.renderItem}
-									keyExtractor={item=>item.id.toString()}
-									columnWrapperStyle={styles.taskList}
-									numColumns={2}
-									removeClippedSubviews={false}
-									nestedScrollEnabled={true}
-									ListFooterComponent={
-										<View
-										style={{alignItems: "center"}}
-										>
-											<NoteBox
-												note={this.props.model.note}
-												setNote={this.props.setNote}
-												updateNote={(note)=>updateNote(note, this.props.model.id)}
-											/>
-											<TagList 
-												tagList={this.props.model.tags}
-												updateTags={(tags)=>{
-													this.props.updateTags(tags, this.props.model.id)}
-												}
-											/>
-											<TagsMenu
-												updateTags={(tags)=>this.props.updateTags(tags, this.props.model.id)}
-												oldTags={this.props.model.tags}
-											/>
-										</View>
+
+								<ProgressBar progress={this.props.progress} width={300}/>
+							</View>
+						}
+						data={[...this.props.tasks,
+							{task: '',
+							id: -1,
+							complete: false,
+							}
+						]}
+						renderItem ={this.renderItem}
+						keyExtractor={item=>item.id.toString()}
+						columnWrapperStyle={styles.taskList}
+						numColumns={2}
+						removeClippedSubviews={false}
+						nestedScrollEnabled={true}
+						ListFooterComponent={
+							<View
+							style={{alignItems: "center"}}
+							>
+								<NoteBox
+									note={this.props.model.note}
+									setNote={this.props.setNote}
+									updateNote={(note)=>updateNote(note, this.props.model.id)}
+								/>
+								<TagList 
+									tagList={this.props.model.tags}
+									updateTags={(tags)=>{
+										this.props.updateTags(tags, '', this.props.model.id)}
 									}
 								/>
-								</View>
-								):
+								<TouchableOpacity
+									onPress={()=>{
+										this.setState({
+											modalType: 'addTags',
+											modalVisible: true
+										})
+									}}
+								>
+									<Text>Add tags...</Text>
+								</TouchableOpacity>
+							</View>
+						}
+						/>
+					</View>
+					):
 					(<View><Text>Single Model View</Text></View>)
 				)
 		}
 	}
 
+	/*
+
+								<TagsMenu
+									updateTags={(tags)=>this.props.updateTags(tags, this.props.model.id)}
+									oldTags={this.props.model.tags}
+								/>
+		*/
 const mapState = state => ({
 	model: state.singleModel.model,
 	tasks: state.singleModel.tasks,
@@ -142,8 +189,8 @@ const mapDispatch = dispatch => ({
 	setNote: (note)=>{
 		dispatch(setNote(note))
 	},
-	updateTags: (tags, model_id)=>{
-		dispatch(updateTags(tags, model_id))
+	updateTags: (tags, oldTags, model_id)=>{
+		dispatch(updateTags(tags, oldTags, model_id))
 	},
 })
 

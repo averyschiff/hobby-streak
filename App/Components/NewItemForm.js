@@ -6,32 +6,43 @@ const NewItemForm = (props) => {
 
   return(
     <View style={{
-      flex: 1,
       alignItems: "center",
+      justifyContent: "space-around",
+      alignContent: "center",
+      alignSelf: "center",
+      width: '75%',
+      height: '50%',
+      backgroundColor: "#bbb",
+      marginTop: 50,
+      borderRadius: 10,
+      opacity: 0.98,
     }}>
       <Text
         style={{
-          backgroundColor:"#fff",
+          fontSize: 24,
         }}
       >
-        New model name:
+        {props.modalText}
       </Text>
       <TextInput
         style={{
-          height: 40,
           padding: 2,
           borderColor: 'black',
           borderWidth: 1,
-          width: 200,
+          width: "90%",
           backgroundColor:"#fff",
+          fontSize: 20,
         }}
+        multiline={true}
         value={newName}
         onChangeText = {text=>{setName(text)}}
       >
       </TextInput>
       <View
       style={{
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '80%'
       }}>
         <Button
           title="Submit"

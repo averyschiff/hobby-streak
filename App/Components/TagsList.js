@@ -8,8 +8,9 @@ const TagsList = (props) => {
   const deleteTag = (tags, tagToDelete) => {
     let newTags = ''
     tags.forEach(tag=>{
-      if (tag!=tagToDelete) newTags = newTags + tag + ', '
+      if (tag && tag!=tagToDelete) newTags = newTags + tag + ', '
     })
+    if (newTags) newTags = newTags.slice(0,-2)
     props.updateTags(newTags)
   }
 

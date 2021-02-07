@@ -6,6 +6,7 @@ import {
 	View, 
 	FlatList,
 	Modal, 
+	Button,
 } from 'react-native'
 import {
 	getModel, 
@@ -16,6 +17,7 @@ import {
 	setNote,
 	updateNote,
 	updateTags,
+	updateModelName,
 } from '../store/singleModel'
 import ProgressBar from 'react-native-progress/Bar'
 import Task from './Task'
@@ -23,7 +25,7 @@ import NoteBox from './NoteBox'
 import TagsMenu from './TagsMenu'
 import TagList from './TagsList'
 import NewItemForm from './NewItemForm'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 
 export class SingleModel extends React.Component{
 
@@ -34,6 +36,8 @@ export class SingleModel extends React.Component{
 		this.state = {
 			modalType: null,
 			modalVisible: false,
+			editName: false,
+			newName: '',
 		}
     this.cancelModal = this.cancelModal.bind(this)
 		this.addTags = this.addTags.bind(this)
@@ -73,6 +77,12 @@ export class SingleModel extends React.Component{
 		)
 	}
 
+	onChangeName = (text) => {
+		this.setState({
+			newName: text
+		})
+	}
+
 	render(){
 		return(
 			this.props.model.modelName?
@@ -103,7 +113,65 @@ export class SingleModel extends React.Component{
 								alignItems: "center"
 							}}>
 								<View style={styles.modelText}>
-									<Text style={styles.modelName}>{this.props.model.modelName}</Text>
+									{this.state.editName?
+									(
+										<View>
+											<TextInput
+												style={{
+													width: '100%',
+													borderColor: 'black',
+													borderWidth: 2,
+													fontSize: 40,
+												}}
+												value={this.state.newName}
+												onChangeText={this.onChangeName}
+											/>
+											<View
+											style={{
+												flexDirection: 'row',
+												justifyContent: 'space-around',
+												width: '80%'
+											}}>
+												<Button
+													title="Confirm"
+													onPress={
+														()=>{
+															this.props.updateModelName(
+																this.state.newName,
+																this.props.model.id
+															)
+															this.setState({
+																editName: false
+															})
+														}
+													}
+												/>
+												<Button
+													title="Cancel"
+													onPress={
+														()=>{
+															this.setState({
+																editName: false,
+															})
+														}
+													}
+												/>
+											</View>
+										</View>
+									):
+									(
+										<TouchableOpacity
+											onLongPress={()=>{
+												this.setState({
+													editName: true,
+													newName: this.props.model.modelName
+												})
+											}}
+										>
+											<Text style={styles.modelName}>{this.props.model.modelName}</Text>
+										</TouchableOpacity>
+									)
+									}
 									<Text>{this.unitName}</Text>
 								</View>
 
@@ -191,6 +259,9 @@ const mapDispatch = dispatch => ({
 	},
 	updateTags: (tags, oldTags, model_id)=>{
 		dispatch(updateTags(tags, oldTags, model_id))
+	},
+	updateModelName: (newName, model_id)=>{
+		dispatch(updateModelName(newName, model_id))
 	},
 })
 

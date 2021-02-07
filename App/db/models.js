@@ -40,6 +40,19 @@ function updateModelTags(tags, model_id, callback, errorHandler){
 	)
 }
 
+function updateModelName(newName, model_id, callback, errorHandler){
+	db.transaction(
+		tx=>{
+			tx.executeSql(
+				"UPDATE models SET modelName = ? where id = ?",
+				[newName, model_id],
+				callback,
+				errorHandler
+			)
+		}
+	)
+}
+
 function getModel(model_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
@@ -133,6 +146,7 @@ export default{
 	newModel,
 	updateModelNote,
 	updateModelTags,
+	updateModelName,
 	getModel,
 	getModelsByUnit,
 	getModelsByArmy,

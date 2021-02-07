@@ -1,6 +1,7 @@
 import {models, tasks} from "../db/"
 
 const SET_MODEL = 'SET_MODEL'
+const SET_MODEL_NAME = 'SET_MODEL_NAME'
 const SET_TASKS = 'SET_TASKS'
 const TOGGLE_TASK = 'TOGGLE_TASK'
 const ADD_TASK = 'ADD_TASK'
@@ -22,6 +23,11 @@ const DEFAULT_TASKS = [
 export const setModel = (model) => ({
 	type: SET_MODEL,
 	model
+})
+
+export const setModelName = (modelName) => ({
+	type: SET_MODEL_NAME,
+	modelName
 })
 
 export const setTasks = (tasks) => ({
@@ -137,6 +143,17 @@ export const updateNote = async (note, model_id) => {
 	)
 }
 
+export const updateModelName = (newName, model_id) => {
+	return async dispatch => {
+		await models.updateModelName(newName, model_id,
+			(_, {rows}) => {
+				dispatch(setModelName(newName))
+			},
+			(_, err) => {alert('Error updating name: ') + err}
+			)
+	}
+}
+
 export const updateTags = (tags, oldTags, model_id) => {
 	let newTags = ''
 	if (oldTags) newTags = oldTags + tags + ', '
@@ -168,6 +185,15 @@ export default function (state=initialModel, action){
 			return {
 				...state,
 				model: action.model
+			}
+		
+		case SET_MODEL_NAME:
+			return {
+				...state,
+				model: {
+					...state.model,
+					modelName: action.modelName
+				}
 			}
 
 		case SET_TASKS:

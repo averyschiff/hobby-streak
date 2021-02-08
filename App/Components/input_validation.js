@@ -20,9 +20,12 @@ export const modelValidation = (name) => {
   }
 }
 
-export const tagValidation = (tags, oldTagLength) => {
+export const tagValidation = (tags, oldTags) => {
   let valid = true
-  let message
+  let message, oldTagLength
+
+  if (oldTags) oldTagLength = oldTags.length
+  else oldTagLength = 0
 
   if (!charsNumsSpaceComma.test(tags)){
     valid = false

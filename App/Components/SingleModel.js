@@ -112,7 +112,7 @@ export class SingleModel extends React.Component{
 							newItem={this.addTags}
 							modalText={'Enter new tags, separated by commas'}
 							validation={
-								(tags)=>tagValidation(tags, this.props.model.tags.length)
+								(tags)=>tagValidation(tags, this.props.model.tags)
 							}
 						/>
 					</Modal>

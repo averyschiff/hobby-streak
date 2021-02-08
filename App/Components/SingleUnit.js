@@ -23,6 +23,7 @@ import styles from '../styles'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import NewItemForm from './NewItemForm'
 import { deleteTask } from '../store/singleModel'
+import {modelValidation} from './input_validation'
 
 export class SingleUnit extends React.Component{
 
@@ -115,6 +116,7 @@ export class SingleUnit extends React.Component{
             cancelModal={this.cancelModal}
             newItem={this.newModel}
             modalText={'New model name:'}
+            validation={modelValidation}
           />
         </Modal>
         <View>

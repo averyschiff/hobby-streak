@@ -28,7 +28,7 @@ export default class App extends React.Component{
 	dbTest = () => {
 		//dbInit.testArmyTable()
 		//dbInit.testUnitTable()
-		dbInit.testModelTable()
+		//dbInit.testModelTable()
 		//dbInit.testTaskTable()
 	}
 

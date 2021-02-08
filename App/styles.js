@@ -11,6 +11,7 @@ export default styles = StyleSheet.create({
 	},
 	modelText: {
 		marginBottom: 10,
+		alignItems: 'center',
 	},
 	modelName: {
 		marginTop: 50,

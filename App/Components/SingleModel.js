@@ -25,6 +25,8 @@ import NoteBox from './NoteBox'
 import TagsMenu from './TagsMenu'
 import TagList from './TagsList'
 import NewItemForm from './NewItemForm'
+import {modelValidation, 
+	tagValidation} from './input_validation'
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler'
 
 export class SingleModel extends React.Component{
@@ -38,6 +40,10 @@ export class SingleModel extends React.Component{
 			modalVisible: false,
 			editName: false,
 			newName: '',
+			modelValid: {
+				valid: true,
+				message: '',
+			},
 		}
     this.cancelModal = this.cancelModal.bind(this)
 		this.addTags = this.addTags.bind(this)
@@ -79,7 +85,8 @@ export class SingleModel extends React.Component{
 
 	onChangeName = (text) => {
 		this.setState({
-			newName: text
+			newName: text,
+			modelValid: modelValidation(text)
 		})
 	}
 
@@ -104,6 +111,9 @@ export class SingleModel extends React.Component{
 							cancelModal={this.cancelModal}
 							newItem={this.addTags}
 							modalText={'Enter new tags, separated by commas'}
+							validation={
+								(tags)=>tagValidation(tags, this.props.model.tags.length)
+							}
 						/>
 					</Modal>
 					<FlatList
@@ -117,8 +127,8 @@ export class SingleModel extends React.Component{
 									(
 										<View>
 											<TextInput
+												multiline={true}
 												style={{
-													width: '100%',
 													borderColor: 'black',
 													borderWidth: 2,
 													fontSize: 40,
@@ -126,6 +136,12 @@ export class SingleModel extends React.Component{
 												value={this.state.newName}
 												onChangeText={this.onChangeName}
 											/>
+											{!this.state.modelValid.valid?
+											(<Text
+												style={{color: 'red'}}
+											>
+												{this.state.modelValid.message}</Text>):
+											(<View></View>)}
 											<View
 											style={{
 												flexDirection: 'row',
@@ -134,6 +150,9 @@ export class SingleModel extends React.Component{
 											}}>
 												<Button
 													title="Confirm"
+													disabled={
+														!this.state.modelValid.valid
+													}
 													onPress={
 														()=>{
 															this.props.updateModelName(

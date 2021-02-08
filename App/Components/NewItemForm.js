@@ -3,6 +3,10 @@ import {View, TextInput, Text, Button} from 'react-native'
 
 const NewItemForm = (props) => {
   const [newName, setName] = useState(props.defaultName)
+  const [valid, checkValid] = useState(true)
+  const [validMessage, changeMessage] = useState('')
+
+  let validCheck
 
   return(
     <View style={{
@@ -35,9 +39,20 @@ const NewItemForm = (props) => {
         }}
         multiline={true}
         value={newName}
-        onChangeText = {text=>{setName(text)}}
+        onChangeText = {text=>{
+          setName(text)
+          validCheck = props.validation(text)
+          checkValid(validCheck.valid)
+          changeMessage(validCheck.message)
+        }}
       >
       </TextInput>
+      {!valid?
+      (<Text
+        style={{color: 'red'}}
+      >
+        {validMessage}</Text>):
+      (<View></View>)}
       <View
       style={{
         flexDirection: 'row',
@@ -46,6 +61,7 @@ const NewItemForm = (props) => {
       }}>
         <Button
           title="Submit"
+          disabled={!valid}
           onPress={
             ()=>{
               props.newItem(newName)

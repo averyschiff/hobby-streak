@@ -17,6 +17,7 @@ export class SingleUnit extends React.Component{
 
   constructor(props){
     super(props)
+		this.unit_id = this.props.route.params.unit_id
     this.state = {
       modalType: null,
       modalVisible: false
@@ -25,8 +26,8 @@ export class SingleUnit extends React.Component{
     this.newModel = this.newModel.bind(this)
   }
   async componentDidMount(){
-    await this.props.getUnit(this.props.unit_id)
-    await this.props.getModels(this.props.unit_id)
+    await this.props.getUnit(this.unit_id)
+    await this.props.getModels(this.unit_id)
   }
 
   cancelModal = () =>{

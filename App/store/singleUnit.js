@@ -1,4 +1,4 @@
-import {units, models} from "../db"
+import {units, models, tasks} from "../db"
 
 const SET_UNIT = 'SET_UNIT'
 const SET_MODELS = 'SET_MODELS'
@@ -42,7 +42,7 @@ export const getModels = (unit_id) => {
 			(_, {rows}) => {
 				dispatch(setModels(rows['_array']))
 			},
-			(_, err)=> {alert('Error retrieving unit: ' + err)}
+			(_, err)=> {alert('Error retrieving models: ' + err)}
 		)
   }
 }
@@ -63,11 +63,14 @@ export const createModel = (modelName, unit_id, army_id) => {
 
 export const deleteModel = (model_id) => {
   return async dispatch => {
-    await models.deleteModel(model_id,
-      (_, {}) => {
-        dispatch(removeModel(model_id))
-      },
-      (_, err) => {alert('Error deleting model: ' + err)}
+    await tasks.deleteTasksByModel(model_id,
+      await models.deleteModel(model_id,
+        (_, {}) => {
+          dispatch(removeModel(model_id))
+        },
+        (_, err) => {alert('Error deleting model: ' + err)}
+      ),
+      (_, err) => {alert('Error deleting tasks for model: ' + err)}
     )
   }
 }

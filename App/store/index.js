@@ -3,11 +3,13 @@ import thunkMiddleware from 'redux-thunk'
 import singleModel from './singleModel'
 import singleUnit from './singleUnit'
 import singleArmy from './singleArmy'
+import allArmies from './allArmies'
 
 const Reducer = combineReducers({
 	singleModel,
 	singleUnit,
 	singleArmy,
+	allArmies,
 })
 
 const middleware = applyMiddleware(thunkMiddleware)

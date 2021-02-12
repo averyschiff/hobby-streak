@@ -5,6 +5,7 @@ import {dbInit} from "./db"
 import SingleModel from "./Components/SingleModel"
 import SingleUnit from "./Components/SingleUnit"
 import SingleArmy from "./Components/SingleArmy"
+import AllArmies from "./Components/AllArmies"
 import store from './store'
 import {MenuProvider} from 'react-native-popup-menu'
 import {NavigationContainer} from '@react-navigation/native'
@@ -37,7 +38,7 @@ export default class App extends React.Component{
 	loadTables = () => {
 
 		dbInit.clearTables()
-		dbInit.createArmyTable(this.incrementTables,true)
+		dbInit.createArmyTable(this.incrementTables,false)
 		dbInit.createUnitTable(this.incrementTables,false)
 		dbInit.createModelTable(this.incrementTables,false)
 		dbInit.createTaskTable(this.incrementTables,false)
@@ -56,10 +57,11 @@ export default class App extends React.Component{
 				<Provider store={store}>
 						<MenuProvider>
 							<NavigationContainer>
-								<Stack.Navigator initialRouteName="Army">
-									<Stack.Screen name="Army">
-										{props=> <SingleArmy {...props} army_id={1}/>}
+								<Stack.Navigator initialRouteName="AllArmies">
+									<Stack.Screen name="AllArmies">
+										{props=> <AllArmies {...props}/>}
 									</Stack.Screen>
+									<Stack.Screen name="Army" component={SingleArmy}/>
 									<Stack.Screen name="Unit" component={SingleUnit}/>
 									<Stack.Screen name="Model" component={SingleModel}/>
 								</Stack.Navigator>

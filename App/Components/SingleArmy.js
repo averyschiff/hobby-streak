@@ -17,6 +17,7 @@ export class SingleArmy extends React.Component{
 
   constructor(props){
     super(props)
+		this.army_id = this.props.route.params.army_id
     this.state = {
       modalType: null,
       modalVisible: false
@@ -25,8 +26,8 @@ export class SingleArmy extends React.Component{
     this.newUnit = this.newUnit.bind(this)
   }
   async componentDidMount(){
-    await this.props.getArmy(this.props.army_id)
-    await this.props.getUnits(this.props.army_id)
+    await this.props.getArmy(this.army_id)
+    await this.props.getUnits(this.army_id)
   }
 
   cancelModal = () =>{

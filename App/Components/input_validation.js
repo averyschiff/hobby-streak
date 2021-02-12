@@ -38,6 +38,25 @@ export const unitValidation = (name) => {
     message
   }
 }
+export const armyValidation = (name) => {
+  let valid = true
+  let message
+
+  if (!charsNumsSpaceComma.test(name)){
+    valid = false
+    message = 'Invalid characters'
+  }else if (name.length>=50){
+    valid = false
+    message = 'Maximum length exceeded'
+  }else if (name.length==0){
+    valid = false
+    message = 'Army name may not be empty'
+  }
+  return {
+    valid,
+    message
+  }
+}
 
 export const tagValidation = (tags, oldTags) => {
   let valid = true

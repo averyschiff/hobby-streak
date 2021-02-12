@@ -3,26 +3,14 @@ import {connect} from 'react-redux'
 import {
 	Text, 
 	View, 
-  FlatList, 
-  Modal,
-  Button,
 } from 'react-native'
-import Menu, {
-  MenuOptions,
-  MenuOption,
-  MenuTrigger
-} from 'react-native-popup-menu'
-
 import {
   getUnit, 
   getModels,
   createModel,
   deleteModel
 } from '../store/singleUnit'
-import styles from '../styles'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import NewItemForm from './NewItemForm'
-import { deleteTask } from '../store/singleModel'
+import NextLevelMenu from './NextLevelMenu'
 import {modelValidation} from './input_validation'
 
 export class SingleUnit extends React.Component{
@@ -55,86 +43,34 @@ export class SingleUnit extends React.Component{
     )
   }
 
-  renderItem = ({item}) => (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        padding: 5,
-      }}
-    >
-      <TouchableOpacity
-        onPress={()=>{
-          this.props.navigation.navigate(
-            'Model',
-            {model_id: item.id, unitName: this.props.unit.unitName}
-          )
-        }}
-      >
-        <Text style={{fontSize: 20}}>{item.modelName}</Text>
-      </TouchableOpacity>
-      <Menu onSelect={
-        value=>{
-          if(value){
-            this.props.deleteModel(item.id)
-          }
-        }
-      }>
-        <MenuTrigger>
-          <View
-            style={{
-              padding: 3,
-              margin: 3,
-            }}
-          >
-            <Text>x</Text>
-          </View>
-        </MenuTrigger>
-        <MenuOptions>
-          <MenuOption value={true} text={`Delete "${item.modelName}"?`} />
-          <MenuOption value={false} text='Cancel'/>
-        </MenuOptions>
-      </Menu>
-    </View>
-  )
-
   render(){
     return(
       this.props.unit.unitName?
       (
-      <View>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={this.state.modalVisible}
-        >
-          <NewItemForm 
-            defaultName={
-              `Model ${this.props.models.length+1}`
-            }
-            cancelModal={this.cancelModal}
-            newItem={this.newModel}
-            modalText={'New model name:'}
-            validation={modelValidation}
-          />
-        </Modal>
-        <View>
-          <Text style={styles.modelName}>{this.props.unit.unitName}</Text>
-          <FlatList
-            data = {this.props.models}
-            renderItem={this.renderItem}
-            keyExtractor={item=>item.id.toString()}
-          />
-          <Button
-            title='New model'
-            onPress={()=>this.setState({
+        <NextLevelMenu
+          navigate = { (id) => this.props.navigation.navigate(
+            'Model',
+            {model_id: id, unitName: this.props.unit.unitName}
+          )}
+          nextName = 'modelName'
+          delete = {(id) => this.props.deleteModel(id)}
+          modalVisible = {this.state.modalVisible}
+          defaultName={
+            `Model ${this.props.models.length+1}`
+          }
+          cancelModal={this.cancelModal}
+          newItem={this.newModel}
+          modalText={'New model name:'}
+          newValidation={modelValidation}
+          topName={this.props.unit.unitName}
+          listData={this.props.models}
+          newButtonText={'New Model'}
+          setModalVisible={()=>{
+            this.setState({
               modalVisible: true
             })
-            }
-          />
-        </View>
-      </View>):
+          }}
+        />):
       (<View>
         <Text>Single unit view</Text>
       </View>)

@@ -64,6 +64,7 @@ export class AllArmies extends React.Component{
             modalVisible: true
           })
         }}
+        noteBox={false}
       />
     )
   }

@@ -15,6 +15,8 @@ import {
   Button,
 } from 'react-native'
 
+import NoteBox from './NoteBox'
+
 
 /*
 Props:
@@ -103,6 +105,14 @@ const NextLevelMenu = (props) => {
           title={props.newButtonText}
           onPress={props.setModalVisible}
         />
+        {props.noteBox?
+          (<NoteBox
+            note={props.note}
+            setNote={props.setNote}
+            updateNote={props.updateNote}
+          />):
+          (<View></View>)
+        }
       </View>
     </View>
   )

@@ -8,7 +8,9 @@ import {
   getUnit, 
   getModels,
   createModel,
-  deleteModel
+  deleteModel,
+  setNote,
+  updateNote,
 } from '../store/singleUnit'
 import NextLevelMenu from './NextLevelMenu'
 import {modelValidation} from './input_validation'
@@ -71,6 +73,10 @@ export class SingleUnit extends React.Component{
               modalVisible: true
             })
           }}
+          noteBox={true}
+          note={this.props.unit.note}
+          setNote={this.props.setNote}
+          updateNote={(note)=>updateNote(note, this.props.unit.id)}
         />):
       (<View>
         <Text>Single unit view</Text>
@@ -98,6 +104,9 @@ const mapDispatch = dispatch => ({
   },
   deleteModel: (model_id)=>{
     dispatch(deleteModel(model_id))
+  },
+  setNote: (note)=>{
+    dispatch(setNote(note))
   },
 })
 

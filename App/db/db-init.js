@@ -37,7 +37,7 @@ const testTable = (select) => {
 	db.transaction(tx => {
 		tx.executeSql(select,
 			[],
-			(tx, rows) => {
+			(tx, {rows}) => {
 				console.log(rows)
 			},
 			(tx, err) => {

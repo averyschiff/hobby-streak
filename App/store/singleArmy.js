@@ -4,6 +4,7 @@ const SET_ARMY = 'SET_ARMY'
 const SET_UNITS = 'SET_UNITS'
 const ADD_UNIT = 'ADD_UNIT'
 const REMOVE_UNIT = 'REMOVE_UNIT'
+const SET_NOTE = 'SET_NOTE'
 
 export const setArmy = (army) => ({
   type: SET_ARMY,
@@ -23,6 +24,11 @@ export const addUnit = (unit) => ({
 export const removeUnit = (unit_id) => ({
   type: REMOVE_UNIT,
   unit_id
+})
+
+export const setNote = (note) => ({
+	type: SET_NOTE,
+	note
 })
 
 export const getArmy = (army_id) => {
@@ -78,6 +84,13 @@ export const deleteUnit = (unit_id) => {
   }
 }
 
+export const updateNote = async (note, army_id) => {
+	await armies.updateArmyNote(note, army_id,
+		null,
+		(_, err)=> {alert('Error updating note: ' + err)}
+	)
+}
+
 const initialArmy = {
   army: {},
   units: [],
@@ -111,6 +124,14 @@ export default function (state=initialArmy, action){
           return unit.id!=action.unit_id
         })
       }
+		case SET_NOTE:
+			return {
+				...state,
+				army: {
+					...state.army,
+					note: action.note
+				}
+			}
     default:
       return state
   }

@@ -8,7 +8,9 @@ import {
   getArmy, 
   getUnits,
   createUnit,
-  deleteUnit
+  deleteUnit,
+  setNote,
+  updateNote,
 } from '../store/singleArmy'
 import NextLevelMenu from './NextLevelMenu'
 import {unitValidation} from './input_validation'
@@ -70,6 +72,10 @@ export class SingleArmy extends React.Component{
               modalVisible: true
             })
           }}
+          noteBox={true}
+          note={this.props.army.note}
+          setNote={this.props.setNote}
+          updateNote={(note)=>updateNote(note, this.props.army.id)}
         />):
       (<View>
         <Text>Single army view</Text>
@@ -97,6 +103,9 @@ const mapDispatch = dispatch => ({
   },
   deleteUnit: (unit_id)=>{
     dispatch(deleteUnit(unit_id))
+  },
+  setNote: (note)=>{
+    dispatch(setNote(note))
   },
 })
 

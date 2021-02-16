@@ -14,12 +14,12 @@ function newUnit(unitName, army_id, callback, errorHandler){
   )
 }
 
-function updateUnit(updateString, unit_id, callback, errorHandler){
+function updateUnitNote(note, unit_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"UPDATE units SET ? WHERE id = ?",
-				[updateString, unit_id],
+				"UPDATE units SET note = ? WHERE id = ?",
+				[note, unit_id],
 				callback,
 				errorHandler
 			)
@@ -91,12 +91,28 @@ function deleteUnitsByArmy(army_id, callback, errorHandler){
 		}
 	)
 }
+
+function addNotesColumn(callback, errorHandler){
+	const query = "ALTER TABLE units " + 
+	"ADD COLUMN note TEXT"
+	db.transaction(
+		tx=>{
+			tx.executeSql(
+				query,
+				[],
+				callback,
+				errorHandler
+			)
+		}
+	)
+}
 export default{
 	newUnit,
-	updateUnit,
+	updateUnitNote,
 	getUnit,
 	getUnitsByArmy,
 	getAllUnits,
 	deleteUnit,
-	deleteUnitsByArmy
+	deleteUnitsByArmy,
+	addNotesColumn,
 }

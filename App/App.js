@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import {Provider} from 'react-redux'
 import {dbInit} from "./db"
+import {units, armies} from "./db"
 import SingleModel from "./Components/SingleModel"
 import SingleUnit from "./Components/SingleUnit"
 import SingleArmy from "./Components/SingleArmy"
@@ -43,6 +44,13 @@ export default class App extends React.Component{
 		dbInit.createModelTable(this.incrementTables,false)
 		dbInit.createTaskTable(this.incrementTables,false)
 
+		/*GET RID OF THIS IN FINAL PRODUCT
+		CURRENTLY SQUASHES AN ERROR IF THE
+		COLUMN ALREADY EXISTS, ONLY NECESSARY
+		FOR MIGRATIONS*/
+		units.addNotesColumn(null, null)
+		armies.addNotesColumn(null,null)
+
 		this.dbTest()
 	}
 
@@ -57,8 +65,8 @@ export default class App extends React.Component{
 				<Provider store={store}>
 						<MenuProvider>
 							<NavigationContainer>
-								<Stack.Navigator initialRouteName="AllArmies">
-									<Stack.Screen name="AllArmies">
+								<Stack.Navigator initialRouteName="All Armies">
+									<Stack.Screen name="All Armies">
 										{props=> <AllArmies {...props}/>}
 									</Stack.Screen>
 									<Stack.Screen name="Army" component={SingleArmy}/>

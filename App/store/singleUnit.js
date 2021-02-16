@@ -4,6 +4,7 @@ const SET_UNIT = 'SET_UNIT'
 const SET_MODELS = 'SET_MODELS'
 const ADD_MODEL = 'ADD_MODEL'
 const REMOVE_MODEL = 'REMOVE_MODEL'
+const SET_NOTE = 'SET_NOTE'
 
 export const setUnit = (unit) => ({
   type: SET_UNIT,
@@ -23,6 +24,11 @@ export const addModel = (model) => ({
 export const removeModel = (model_id) => ({
   type: REMOVE_MODEL,
   model_id
+})
+
+export const setNote = (note) => ({
+	type: SET_NOTE,
+	note
 })
 
 export const getUnit = (unit_id) => {
@@ -75,6 +81,13 @@ export const deleteModel = (model_id) => {
   }
 }
 
+export const updateNote = async (note, unit_id) => {
+	await units.updateUnitNote(note, unit_id,
+		null,
+		(_, err)=> {alert('Error updating note: ' + err)}
+	)
+}
+
 const initialUnit = {
   unit: {},
   models: [],
@@ -108,6 +121,14 @@ export default function (state=initialUnit, action){
           return model.id!=action.model_id
         })
       }
+		case SET_NOTE:
+			return {
+				...state,
+				unit: {
+					...state.unit,
+					note: action.note
+				}
+			}
     default:
       return state
   }

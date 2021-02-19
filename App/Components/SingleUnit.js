@@ -11,6 +11,8 @@ import {
   deleteModel,
   setNote,
   updateNote,
+  getUnitTasks,
+  updateTasksStatusByUnit,
 } from '../store/singleUnit'
 import NextLevelMenu from './NextLevelMenu'
 import {modelValidation} from './input_validation'
@@ -30,6 +32,7 @@ export class SingleUnit extends React.Component{
   async componentDidMount(){
     await this.props.getUnit(this.unit_id)
     await this.props.getModels(this.unit_id)
+    await this.props.getTasks(this.unit_id)
   }
 
   cancelModal = () =>{
@@ -73,6 +76,13 @@ export class SingleUnit extends React.Component{
               modalVisible: true
             })
           }}
+          tasks={this.props.tasks}
+          editTaskButtons={
+            {
+              checkAll: (task)=>this.props.updateTasks(1, this.props.unit.id, task),
+              uncheckAll: (task)=>this.props.updateTasks(0, this.props.unit.id, task),
+            }
+          }
           noteBox={true}
           note={this.props.unit.note}
           setNote={this.props.setNote}
@@ -89,6 +99,7 @@ export class SingleUnit extends React.Component{
 const mapState = state => ({
   unit: state.singleUnit.unit,
   models: state.singleUnit.models,
+  tasks: state.singleUnit.tasks,
 })
 
 
@@ -108,6 +119,12 @@ const mapDispatch = dispatch => ({
   setNote: (note)=>{
     dispatch(setNote(note))
   },
+  getTasks: (unit_id)=>{
+    dispatch(getUnitTasks(unit_id))
+  },
+  updateTasks: (status, unit_id, task)=>{
+    dispatch(updateTasksStatusByUnit(status, unit_id, task))
+  }
 })
 
 export default connect(mapState, mapDispatch)(SingleUnit)

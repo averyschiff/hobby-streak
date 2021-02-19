@@ -5,6 +5,19 @@ const SET_MODELS = 'SET_MODELS'
 const ADD_MODEL = 'ADD_MODEL'
 const REMOVE_MODEL = 'REMOVE_MODEL'
 const SET_NOTE = 'SET_NOTE'
+const SET_UNIT_TASKS = 'SET_UNIT_TASKS'
+const SET_UNIT_TASK_STATUS = 'SET_UNIT_TASK_STATUS'
+
+const DEFAULT_TASKS = [
+	"Cleaned", 
+	"Built", 
+	"Primed", 
+	"Basecoat", 
+	"Painted", 
+	"Based", 
+	"Magnetized", 
+	"Lacquered",
+]
 
 export const setUnit = (unit) => ({
   type: SET_UNIT,
@@ -29,6 +42,17 @@ export const removeModel = (model_id) => ({
 export const setNote = (note) => ({
 	type: SET_NOTE,
 	note
+})
+
+export const setTasks = (tasks) => ({
+  type: SET_UNIT_TASKS,
+  tasks
+})
+
+export const setTaskStatus = (task, status) => ({
+  type: SET_UNIT_TASK_STATUS,
+  task,
+  status,
 })
 
 export const getUnit = (unit_id) => {
@@ -88,12 +112,36 @@ export const updateNote = async (note, unit_id) => {
 	)
 }
 
+export const getUnitTasks = (unit_id) => {
+  return async dispatch => {
+    await tasks.getTasksByUnit(unit_id,
+      (_, {rows})=>{
+        dispatch(setTasks(rows['_array']))
+      },
+      (_, err)=>{alert('Error fetching tasks: ' + err)}
+    )
+  }
+}
+
+export const updateTasksStatusByUnit = (status, unit_id, task) => {
+  return async dispatch => {
+    await tasks.updateTasksStatusByUnit(status, unit_id, task,
+      (_, {rows})=>{
+        dispatch(setTaskStatus(task, status))
+      },
+      (_, err)=>{alert('Error updating tasks: ' + err)}
+    )
+  }
+}
+
 const initialUnit = {
   unit: {},
   models: [],
+  tasks: {},
 }
 
 export default function (state=initialUnit, action){
+  let unitTasks = {}
   switch(action.type){
     case SET_UNIT:
       return {
@@ -129,6 +177,47 @@ export default function (state=initialUnit, action){
 					note: action.note
 				}
 			}
+    case SET_UNIT_TASKS:
+      let taskName, oldTotal, id=0
+      if (action.tasks.length>0){
+        action.tasks.map(task=>{
+          taskName = task.task
+          if (taskName in unitTasks){
+            oldTotal = unitTasks[taskName].complete*unitTasks[taskName].count
+            unitTasks[taskName].count++
+            unitTasks[taskName].complete = (oldTotal + task.complete)/unitTasks[taskName].count
+          }else{
+            unitTasks[taskName] = {
+              id: id++,
+              count: 1,
+              complete: task.complete
+            }
+          }
+        })
+      }else{
+        DEFAULT_TASKS.map(task=>{
+          unitTasks[task] = {
+            id: id++,
+            count: 0,
+            complete: 0
+          }
+        })
+      }
+      return {
+        ...state,
+        tasks: unitTasks
+      }
+    case SET_UNIT_TASK_STATUS:
+      unitTasks = {...state.tasks}
+      unitTasks[action.task] = {
+        ...unitTasks[action.task],
+        complete: action.status
+      }
+      console.log(unitTasks)
+      return {
+        ...state,
+        tasks: unitTasks
+      } 
     default:
       return state
   }

@@ -1,6 +1,9 @@
 import React from 'react'
 import styles from '../styles'
+
 import NewItemForm from './NewItemForm'
+import EditTaskMenu from './EditTaskMenu'
+
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Menu, {
   MenuOptions,
@@ -105,6 +108,14 @@ const NextLevelMenu = (props) => {
           title={props.newButtonText}
           onPress={props.setModalVisible}
         />
+        {props.tasks?
+          (<EditTaskMenu 
+            taskKeys={Object.keys(props.tasks)}
+            taskLib = {props.tasks}
+            editTaskButtons={props.editTaskButtons}
+            />):
+          (<View></View>)
+        }
         {props.noteBox?
           (<NoteBox
             note={props.note}

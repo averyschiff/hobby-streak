@@ -40,12 +40,13 @@ function updateTaskFalse(task_id, callback, errorHandler){
 	)
 }
 
-function updateTasksByUnit(updateString, unit_id, callback, errorHandler){
+function updateTasksStatusByUnit(status, unit_id, task, callback, errorHandler){
 	db.transaction(
 		tx=>{
 			tx.executeSql(
-				"UPDATE tasks SET ? WHERE unit_id = ?",
-				[updateString, unit_id],
+				"UPDATE tasks SET complete = ? " + 
+				"WHERE unit_id = ? AND task = ?",
+				[status, unit_id, task],
 				callback,
 				errorHandler
 			)
@@ -185,7 +186,7 @@ export default{
 	newTask,
 	updateTaskTrue,
 	updateTaskFalse,
-	updateTasksByUnit,
+	updateTasksStatusByUnit,
 	updateTasksByArmy,
 	getTask,
 	getTasksByModel,

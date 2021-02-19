@@ -98,6 +98,7 @@ export class SingleModel extends React.Component{
 				style={
 					{
 						alignItems:"center",
+						flex: 1,
 					}
 				}
 				>

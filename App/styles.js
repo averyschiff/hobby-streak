@@ -45,5 +45,14 @@ export default styles = StyleSheet.create({
 	task: {
 		fontSize: 14,
 	},
+	editTaskButton: {
+		padding: 4,
+		margin: 4,
+		backgroundColor: '#2196f3',
+	},
+	editTaskButtonText: {
+		fontSize: 14,
+		color: 'white',
+	},
 
 });

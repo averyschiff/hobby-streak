@@ -48,8 +48,8 @@ export default class App extends React.Component{
 		CURRENTLY SQUASHES AN ERROR IF THE
 		COLUMN ALREADY EXISTS, ONLY NECESSARY
 		FOR MIGRATIONS*/
-		units.addNotesColumn(null, null)
-		armies.addNotesColumn(null,null)
+		//units.addNotesColumn(null, null)
+		//armies.addNotesColumn(null,null)
 
 		this.dbTest()
 	}

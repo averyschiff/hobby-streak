@@ -87,15 +87,26 @@ const NextLevelMenu = (props) => {
         transparent={true}
         visible={props.modalVisible}
       >
-        <NewItemForm 
-          defaultName={
-            props.defaultName
-          }
-          cancelModal={props.cancelModal}
-          newItem={props.newItem}
-          modalText={props.modalText}
-          validation={props.newValidation}
-        />
+        {props.modalType=='createNextLevel'?
+          (<NewItemForm 
+            defaultName={
+              props.defaultName
+            }
+            cancelModal={props.cancelModal}
+            newItem={props.newItem}
+            modalText={props.modalText}
+            validation={props.newValidation}
+          />):
+          (props.tasks?
+          (<EditTaskMenu 
+            taskKeys={Object.keys(props.tasks)}
+            taskLib = {props.tasks}
+            editTaskButtons={props.editTaskButtons}
+            cancelModal={props.cancelModal}
+            />):
+            (<View></View>)
+          )
+        }
       </Modal>
       <View>
         <Text style={styles.modelName}>{props.topName}</Text>
@@ -106,14 +117,14 @@ const NextLevelMenu = (props) => {
         />
         <Button
           title={props.newButtonText}
-          onPress={props.setModalVisible}
+          onPress={()=>props.setModalVisible('createNextLevel')}
         />
+        <View style={{padding:10}}></View>
         {props.tasks?
-          (<EditTaskMenu 
-            taskKeys={Object.keys(props.tasks)}
-            taskLib = {props.tasks}
-            editTaskButtons={props.editTaskButtons}
-            />):
+          (<Button
+            title={'Edit tasks for all models'}
+            onPress={()=>props.setModalVisible('editTasks')}
+          />):
           (<View></View>)
         }
         {props.noteBox?

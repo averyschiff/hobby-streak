@@ -18,6 +18,7 @@ import {
 	updateNote,
 	updateTags,
 	updateModelName,
+	setTasks,
 } from '../store/singleModel'
 import ProgressBar from 'react-native-progress/Bar'
 import Task from './Task'

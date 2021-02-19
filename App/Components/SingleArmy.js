@@ -57,6 +57,7 @@ export class SingleArmy extends React.Component{
           nextName = 'unitName'
           delete = {(id) => this.props.deleteUnit(id)}
           modalVisible = {this.state.modalVisible}
+          modalType = {this.state.modalType}
           defaultName={
             ``
           }
@@ -67,9 +68,10 @@ export class SingleArmy extends React.Component{
           topName={this.props.army.armyName}
           listData={this.props.units}
           newButtonText={'New Unit'}
-          setModalVisible={()=>{
+          setModalVisible={(modalType)=>{
             this.setState({
-              modalVisible: true
+              modalVisible: true,
+              modalType: modalType
             })
           }}
           noteBox={true}

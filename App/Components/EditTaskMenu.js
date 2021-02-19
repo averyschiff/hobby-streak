@@ -3,9 +3,9 @@ import { render } from 'react-dom'
 import {View, 
   Text, 
   FlatList,
-  Touchable,
+  Button,
+  TouchableOpacity
 } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import styles from '../styles'
 
 const EditTaskMenu = (props) => {
@@ -82,7 +82,19 @@ const EditTaskMenu = (props) => {
   }
 
   return(
-    <View style={{height:'40%'}}>
+    <View style={{
+      alignItems: "center",
+      width: '100%',
+      height: '50%',
+      backgroundColor: "#ddd",
+      marginTop: 50,
+      borderRadius: 10,
+      opacity: 1.0,
+    }}>
+      <Button
+        title="Cancel"
+        onPress={props.cancelModal}
+      />
       <FlatList
         data={props.taskKeys}
         renderItem={renderItem}

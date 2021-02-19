@@ -49,6 +49,7 @@ export class AllArmies extends React.Component{
         nextName = 'armyName'
         delete = {(id) => this.props.deleteArmy(id)}
         modalVisible = {this.state.modalVisible}
+        modalType = {this.state.modalType}
         defaultName={
           ``
         }
@@ -59,9 +60,10 @@ export class AllArmies extends React.Component{
         topName={'Armies'}
         listData={this.props.armies}
         newButtonText={'New Army'}
-        setModalVisible={()=>{
+        setModalVisible={(modalType)=>{
           this.setState({
-            modalVisible: true
+            modalVisible: true,
+            modalType: modalType,
           })
         }}
         noteBox={false}

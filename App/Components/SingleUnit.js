@@ -30,9 +30,15 @@ export class SingleUnit extends React.Component{
     this.newModel = this.newModel.bind(this)
   }
   async componentDidMount(){
-    await this.props.getUnit(this.unit_id)
-    await this.props.getModels(this.unit_id)
-    await this.props.getTasks(this.unit_id)
+    this._unsubscribe = this.props.navigation.addListener('focus', async ()=>{
+      await this.props.getUnit(this.unit_id)
+      await this.props.getModels(this.unit_id)
+      await this.props.getTasks(this.unit_id)
+    })
+  }
+
+  componentWillUnmount(){
+    this._unsubscribe()
   }
 
   cancelModal = () =>{
@@ -56,11 +62,17 @@ export class SingleUnit extends React.Component{
         <NextLevelMenu
           navigate = { (id) => this.props.navigation.navigate(
             'Model',
-            {model_id: id, unitName: this.props.unit.unitName}
+            {
+              model_id: id, 
+              unitName: this.props.unit.unitName}
           )}
           nextName = 'modelName'
-          delete = {(id) => this.props.deleteModel(id)}
+          delete = {async (id) => {
+            await this.props.deleteModel(id)
+            await this.props.getTasks(this.props.unit.id)
+          }}
           modalVisible = {this.state.modalVisible}
+          modalType = {this.state.modalType}
           defaultName={
             `Model ${this.props.models.length+1}`
           }
@@ -71,9 +83,10 @@ export class SingleUnit extends React.Component{
           topName={this.props.unit.unitName}
           listData={this.props.models}
           newButtonText={'New Model'}
-          setModalVisible={()=>{
+          setModalVisible={(modalType)=>{
             this.setState({
-              modalVisible: true
+              modalVisible: true,
+              modalType: modalType
             })
           }}
           tasks={this.props.tasks}

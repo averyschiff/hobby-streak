@@ -213,7 +213,6 @@ export default function (state=initialUnit, action){
         ...unitTasks[action.task],
         complete: action.status
       }
-      console.log(unitTasks)
       return {
         ...state,
         tasks: unitTasks

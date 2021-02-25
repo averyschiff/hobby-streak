@@ -18,12 +18,10 @@ import {
 	updateNote,
 	updateTags,
 	updateModelName,
-	setTasks,
 } from '../store/singleModel'
 import ProgressBar from 'react-native-progress/Bar'
 import Task from './Task'
 import NoteBox from './NoteBox'
-import TagsMenu from './TagsMenu'
 import TagList from './TagsList'
 import NewItemForm from './NewItemForm'
 import {modelValidation, 
@@ -246,13 +244,6 @@ export class SingleModel extends React.Component{
 		}
 	}
 
-	/*
-
-								<TagsMenu
-									updateTags={(tags)=>this.props.updateTags(tags, this.props.model.id)}
-									oldTags={this.props.model.tags}
-								/>
-		*/
 const mapState = state => ({
 	model: state.singleModel.model,
 	tasks: state.singleModel.tasks,

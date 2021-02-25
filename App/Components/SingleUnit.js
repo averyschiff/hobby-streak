@@ -13,6 +13,7 @@ import {
   updateNote,
   getUnitTasks,
   updateTasksStatusByUnit,
+  addTasksThroughUnit
 } from '../store/singleUnit'
 import NextLevelMenu from './NextLevelMenu'
 import {modelValidation} from './input_validation'
@@ -55,6 +56,12 @@ export class SingleUnit extends React.Component{
     )
   }
 
+  findDifference = (taskModels, allModels) => {
+    return allModels.map(model=>model.id).filter(model=>{
+      return !(taskModels.includes(model))
+    })
+  }
+
   render(){
     return(
       this.props.unit.unitName?
@@ -94,6 +101,12 @@ export class SingleUnit extends React.Component{
             {
               checkAll: (task)=>this.props.updateTasks(1, this.props.unit.id, task),
               uncheckAll: (task)=>this.props.updateTasks(0, this.props.unit.id, task),
+              addToAll: (task, taskModels)=>this.props.addTasksThroughUnit(
+                this.props.unit.id, 
+                this.props.unit.army_id, 
+                task, 
+                this.findDifference(taskModels, this.props.models)
+              )
             }
           }
           noteBox={true}
@@ -137,6 +150,9 @@ const mapDispatch = dispatch => ({
   },
   updateTasks: (status, unit_id, task)=>{
     dispatch(updateTasksStatusByUnit(status, unit_id, task))
+  },
+  addTasksThroughUnit: (unit_id, army_id, task, toAdd)=>{
+    dispatch(addTasksThroughUnit(unit_id, army_id, task, toAdd))
   }
 })
 

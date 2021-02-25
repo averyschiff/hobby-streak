@@ -14,6 +14,29 @@ function newTask(task, model_id, unit_id, army_id, callback, errorHandler){
   )
 }
 
+function addTasksThroughUnit(task, unit_id, army_id, modelsToAdd, callback, errorHandler){
+	let argsArray = []
+	let builtQuery = "INSERT INTO tasks (task, model_id, unit_id, army_id) VALUES "
+	modelsToAdd.map(modelId=>{
+		builtQuery += '(?, ?, ?, ?), '
+		argsArray.push(task)
+		argsArray.push(modelId)
+		argsArray.push(unit_id)
+		argsArray.push(army_id)
+	})
+	builtQuery = builtQuery.slice(0,-2)
+	db.transaction(
+		tx => {
+			tx.executeSql(
+				builtQuery,
+				argsArray,
+				callback,
+				errorHandler
+			)
+		}
+	)  
+}
+
 function updateTaskTrue(task_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
@@ -157,7 +180,18 @@ function deleteTasksByModel(model_id, callback, errorHandler){
 		}
 	)
 }
-
+function deleteTaskByUnit(unit_id, task, callback, errorHandler){
+	db.transaction(
+		tx=>{
+			tx.executeSql(
+				"DELETE FROM tasks WHERE unit_id = ? AND task = ?",
+				[unit_id, task],
+				callback,
+				errorHandler
+			)
+		}
+	)
+}
 function deleteTasksByUnit(unit_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
@@ -184,6 +218,7 @@ function deleteTasksByArmy(army_id, callback, errorHandler){
 }
 export default{
 	newTask,
+	addTasksThroughUnit,
 	updateTaskTrue,
 	updateTaskFalse,
 	updateTasksStatusByUnit,
@@ -195,6 +230,7 @@ export default{
 	getAllTasks,
 	deleteTask,
 	deleteTasksByModel,
+	deleteTaskByUnit,
 	deleteTasksByUnit,
 	deleteTasksByArmy
 }

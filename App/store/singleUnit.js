@@ -1,4 +1,4 @@
-import {units, models, tasks} from "../db"
+import {units, models, tasks, unit_tasks} from "../db"
 
 const SET_UNIT = 'SET_UNIT'
 const SET_MODELS = 'SET_MODELS'
@@ -7,6 +7,8 @@ const REMOVE_MODEL = 'REMOVE_MODEL'
 const SET_NOTE = 'SET_NOTE'
 const SET_UNIT_TASKS = 'SET_UNIT_TASKS'
 const SET_UNIT_TASK_STATUS = 'SET_UNIT_TASK_STATUS'
+const ADD_UNIT_TASKS_TO_MODELS = 'ADD_UNIT_TASKS_TO_MODELS'
+const REMOVE_TASK_FROM_UNIT = 'REMOVE_TASK_FROM_UNIT'
 
 const DEFAULT_TASKS = [
 	"Cleaned", 
@@ -53,6 +55,17 @@ export const setTaskStatus = (task, status) => ({
   type: SET_UNIT_TASK_STATUS,
   task,
   status,
+})
+
+export const addTaskToModels = (models, task) => ({
+  type: ADD_UNIT_TASKS_TO_MODELS,
+  models,
+  task
+})
+
+export const removeTaskFromUnit = (task) => ({
+  type: REMOVE_TASK_FROM_UNIT,
+  task
 })
 
 export const getUnit = (unit_id) => {
@@ -134,6 +147,19 @@ export const updateTasksStatusByUnit = (status, unit_id, task) => {
   }
 }
 
+export const addTasksThroughUnit = (unit_id, army_id, task, toAdd) => {
+  return async dispatch => {
+    if (toAdd.length>0){
+      await tasks.addTasksThroughUnit(task, unit_id, army_id, toAdd,
+        (_, {rows}) => {
+          dispatch(addTaskToModels(toAdd, task))
+        },
+        (_, err)=>{alert('Error add tasks to models: ' + err)}
+      )
+    }
+  }
+}
+
 const initialUnit = {
   unit: {},
   models: [],
@@ -141,7 +167,7 @@ const initialUnit = {
 }
 
 export default function (state=initialUnit, action){
-  let unitTasks = {}
+  let unitTasks = {}, oldTotal, taskName
   switch(action.type){
     case SET_UNIT:
       return {
@@ -178,7 +204,7 @@ export default function (state=initialUnit, action){
 				}
 			}
     case SET_UNIT_TASKS:
-      let taskName, oldTotal, id=0
+      let id=0
       if (action.tasks.length>0){
         action.tasks.map(task=>{
           taskName = task.task
@@ -186,11 +212,13 @@ export default function (state=initialUnit, action){
             oldTotal = unitTasks[taskName].complete*unitTasks[taskName].count
             unitTasks[taskName].count++
             unitTasks[taskName].complete = (oldTotal + task.complete)/unitTasks[taskName].count
+            unitTasks[taskName].modelIds.push(task.model_id)
           }else{
             unitTasks[taskName] = {
               id: id++,
               count: 1,
-              complete: task.complete
+              complete: task.complete,
+              modelIds: [task.model_id]
             }
           }
         })
@@ -199,7 +227,8 @@ export default function (state=initialUnit, action){
           unitTasks[task] = {
             id: id++,
             count: 0,
-            complete: 0
+            complete: 0,
+            modelIds: []
           }
         })
       }
@@ -213,6 +242,27 @@ export default function (state=initialUnit, action){
         ...unitTasks[action.task],
         complete: action.status
       }
+      return {
+        ...state,
+        tasks: unitTasks
+      } 
+    case ADD_UNIT_TASKS_TO_MODELS:
+
+      let newModels = action.models
+
+      taskName = action.task
+      unitTasks = {...state.tasks}
+      oldTotal = unitTasks[taskName].complete*unitTasks[taskName].count
+
+      let newCount = unitTasks[taskName].count+newModels.length
+
+      unitTasks[taskName] = {
+        ...unitTasks[taskName],
+        count: newCount,
+        complete: oldTotal/newCount,
+        modelIds: [...unitTasks[taskName].modelIds, ...newModels]
+      }
+
       return {
         ...state,
         tasks: unitTasks

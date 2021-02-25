@@ -3,7 +3,7 @@ import {View, TextInput, Text, Button} from 'react-native'
 
 const NewItemForm = (props) => {
   const [newName, setName] = useState(props.defaultName)
-  const [valid, checkValid] = useState(true)
+  const [valid, checkValid] = useState(props.defaultName.length>0)
   const [validMessage, changeMessage] = useState('')
 
   let validCheck

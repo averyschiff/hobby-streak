@@ -6,9 +6,15 @@ import {View,
   Button,
   TouchableOpacity
 } from 'react-native'
+import { TextInput } from 'react-native-gesture-handler'
 import styles from '../styles'
 
+import TaskButtons from './TaskButtons'
+
 const EditTaskMenu = (props) => {
+  const [newTask, setNewTask] = useState('')
+  const [valid, checkValid] = useState(true)
+  const [validMessage, changeMessage] = useState('')
 
   renderItem = ({item}) => {
     let entry = props.taskLib[item]
@@ -40,50 +46,14 @@ const EditTaskMenu = (props) => {
             (<Text></Text>)
           }
         </View>
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-        }}>
-          <View>
-            <TouchableOpacity 
-              style={styles.editTaskButton}
-              onPress={()=>props.editTaskButtons.checkAll(item)}
-            >
-              <Text style={styles.editTaskButtonText}>
-                Check all
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.editTaskButton}
-              onPress={()=>props.editTaskButtons.uncheckAll(item)}
-            >
-              <Text style={styles.editTaskButtonText}>
-                Uncheck all
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <TouchableOpacity 
-              style={styles.editTaskButton}
-              onPress={()=>props.editTaskButtons.addToAll(item, entry.modelIds)}
-            >
-              <Text style={styles.editTaskButtonText}>
-                Add to all
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.editTaskButton}
-              onPress={()=>props.editTaskButtons.deleteFromAll(item)}
-            >
-              <Text style={styles.editTaskButtonText}>
-                Delete
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <TaskButtons editTaskButtons={{
+          checkAll: () => props.editTaskButtons.checkAll(item),
+          uncheckAll: () => props.editTaskButtons.uncheckAll(item),
+          addToAll: () => props.editTaskButtons.addToAll(item, entry.modelIds),
+          deleteFromAll: () => props.editTaskButtons.deleteFromAll(item)
+        }}/>
       </View>
     )
-
 
   }
 
@@ -91,7 +61,7 @@ const EditTaskMenu = (props) => {
     <View style={{
       alignItems: "center",
       width: '100%',
-      height: '50%',
+      height: '60%',
       backgroundColor: "#ddd",
       marginTop: 50,
       borderRadius: 10,
@@ -105,6 +75,20 @@ const EditTaskMenu = (props) => {
         data={props.taskKeys}
         renderItem={renderItem}
         keyExtractor={item=>props.taskLib[item].id.toString()}
+      />
+      <Button
+        title="Add new task"
+      />
+      <TextInput
+        style={{
+          padding: 2,
+          borderColor: 'black',
+          borderWidth: 1,
+          width: '60%',
+          backgroundColor:'#fff',
+          marginTop: 2,
+          marginBottom: 10,
+        }}
       />
     </View>
   )

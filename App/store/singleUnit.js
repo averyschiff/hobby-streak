@@ -1,4 +1,4 @@
-import {units, models, tasks, unit_tasks} from "../db"
+import {units, models, tasks} from "../db"
 
 const SET_UNIT = 'SET_UNIT'
 const SET_MODELS = 'SET_MODELS'
@@ -160,6 +160,17 @@ export const addTasksThroughUnit = (unit_id, army_id, task, toAdd) => {
   }
 }
 
+export const deleteTaskByUnit = (unit_id, task) => {
+  return async dispatch => {
+    await tasks.deleteTaskByUnit(unit_id, task,
+      (_, {rows}) => {
+        dispatch(removeTaskFromUnit(task))
+      },
+      (_, err)=>{alert('Error removing task: ' + err)}
+    )
+  }
+}
+
 const initialUnit = {
   unit: {},
   models: [],
@@ -267,6 +278,13 @@ export default function (state=initialUnit, action){
         ...state,
         tasks: unitTasks
       } 
+    case REMOVE_TASK_FROM_UNIT:
+      unitTasks = {...state.tasks}
+      delete unitTasks[action.task]
+      return {
+        ...state,
+        tasks: unitTasks
+      }
     default:
       return state
   }

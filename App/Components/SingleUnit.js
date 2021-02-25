@@ -13,7 +13,8 @@ import {
   updateNote,
   getUnitTasks,
   updateTasksStatusByUnit,
-  addTasksThroughUnit
+  addTasksThroughUnit,
+  deleteTaskByUnit,
 } from '../store/singleUnit'
 import NextLevelMenu from './NextLevelMenu'
 import {modelValidation} from './input_validation'
@@ -106,7 +107,8 @@ export class SingleUnit extends React.Component{
                 this.props.unit.army_id, 
                 task, 
                 this.findDifference(taskModels, this.props.models)
-              )
+              ),
+              deleteFromAll: (task)=>this.props.deleteTask(this.props.unit.id, task)
             }
           }
           noteBox={true}
@@ -153,6 +155,9 @@ const mapDispatch = dispatch => ({
   },
   addTasksThroughUnit: (unit_id, army_id, task, toAdd)=>{
     dispatch(addTasksThroughUnit(unit_id, army_id, task, toAdd))
+  },
+  deleteTask: (unit_id, task)=>{
+    dispatch(deleteTaskByUnit(unit_id, task))
   }
 })
 

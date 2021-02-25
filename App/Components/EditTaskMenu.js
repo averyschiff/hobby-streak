@@ -71,7 +71,10 @@ const EditTaskMenu = (props) => {
                 Add to all
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.editTaskButton}>
+            <TouchableOpacity 
+              style={styles.editTaskButton}
+              onPress={()=>props.editTaskButtons.deleteFromAll(item)}
+            >
               <Text style={styles.editTaskButtonText}>
                 Delete
               </Text>

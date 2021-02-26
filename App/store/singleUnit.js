@@ -10,17 +10,6 @@ const SET_UNIT_TASK_STATUS = 'SET_UNIT_TASK_STATUS'
 const ADD_UNIT_TASKS_TO_MODELS = 'ADD_UNIT_TASKS_TO_MODELS'
 const REMOVE_TASK_FROM_UNIT = 'REMOVE_TASK_FROM_UNIT'
 
-const DEFAULT_TASKS = [
-	"Cleaned", 
-	"Built", 
-	"Primed", 
-	"Basecoat", 
-	"Painted", 
-	"Based", 
-	"Magnetized", 
-	"Lacquered",
-]
-
 export const setUnit = (unit) => ({
   type: SET_UNIT,
   unit
@@ -176,11 +165,22 @@ const initialUnit = {
   models: [],
   tasks: {},
   taskId: 0,
+  defaultTasks: [
+    "Cleaned", 
+    "Built", 
+    "Primed", 
+    "Basecoat", 
+    "Painted", 
+    "Based", 
+    "Magnetized", 
+    "Lacquered",
+  ]
 }
 
 export default function (state=initialUnit, action){
   let unitTasks = {}, oldTotal, taskName
   let id=state.taskId
+  let newDefault = state.defaultTasks
   switch(action.type){
     case SET_UNIT:
       return {
@@ -235,7 +235,7 @@ export default function (state=initialUnit, action){
           }
         })
       }else{
-        DEFAULT_TASKS.map(task=>{
+        state.defaultTasks.map(task=>{
           unitTasks[task] = {
             id: id++,
             count: 0,
@@ -283,19 +283,24 @@ export default function (state=initialUnit, action){
           complete: 0,
           modelIds: newModels
         }
+        newDefault.push(taskName)
       }
 
       return {
         ...state,
         tasks: unitTasks,
-        taskId: id
+        taskId: id,
+        defaultTasks: newDefault
       } 
     case REMOVE_TASK_FROM_UNIT:
       unitTasks = {...state.tasks}
       delete unitTasks[action.task]
+      let indexToRemove = state.defaultTasks.indexOf(action.task)
+      newDefault.splice(indexToRemove, 1)
       return {
         ...state,
-        tasks: unitTasks
+        tasks: unitTasks,
+        defaultTasks: newDefault
       }
     default:
       return state

@@ -18,6 +18,7 @@ import {
 	updateNote,
 	updateTags,
 	updateModelName,
+	resetModel,
 } from '../store/singleModel'
 import ProgressBar from 'react-native-progress/Bar'
 import Task from './Task'
@@ -34,6 +35,7 @@ export class SingleModel extends React.Component{
 		super(props)
 		this.model_id = this.props.route.params.model_id
 		this.unitName = this.props.route.params.unitName
+		this.defaultTasks = this.props.route.params.defaultTasks
 		this.state = {
 			modalType: null,
 			modalVisible: false,
@@ -49,8 +51,15 @@ export class SingleModel extends React.Component{
 	}
 
 	async componentDidMount(){
-		await this.props.getModel(this.model_id)
-		await this.props.getTasks(this.model_id)
+		this._unsubscribe = this.props.navigation.addListener('focus', async () =>{
+			await this.props.getModel(this.model_id)
+			await this.props.getTasks(this.model_id, this.defaultTasks)
+		})
+	}
+
+	componentWillUnmount(){
+		this.props.reset()
+		this._unsubscribe()
 	}
 
 	renderItem = ({item}) => (
@@ -254,8 +263,8 @@ const mapDispatch = dispatch => ({
 	getModel: (model_id)=>{
 		dispatch(getModel(model_id))
 	},
-	getTasks: (model_id)=>{
-		dispatch(getTasks(model_id))
+	getTasks: (model_id, defaultTasks)=>{
+		dispatch(getTasks(model_id, defaultTasks))
 	},
 	updateTask: (task_id, value)=>{
 		dispatch(updateTask(task_id, value))
@@ -275,6 +284,9 @@ const mapDispatch = dispatch => ({
 	updateModelName: (newName, model_id)=>{
 		dispatch(updateModelName(newName, model_id))
 	},
+	reset: ()=>{
+		dispatch(resetModel())
+	}
 })
 
 export default connect(mapState, mapDispatch)(SingleModel)

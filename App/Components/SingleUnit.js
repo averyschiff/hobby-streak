@@ -72,7 +72,9 @@ export class SingleUnit extends React.Component{
             'Model',
             {
               model_id: id, 
-              unitName: this.props.unit.unitName}
+              unitName: this.props.unit.unitName,
+              defaultTasks: this.props.defaults
+            }
           )}
           nextName = 'modelName'
           delete = {async (id) => {
@@ -128,6 +130,7 @@ const mapState = state => ({
   unit: state.singleUnit.unit,
   models: state.singleUnit.models,
   tasks: state.singleUnit.tasks,
+  defaults: state.singleUnit.defaultTasks,
 })
 
 

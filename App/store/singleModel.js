@@ -9,16 +9,7 @@ const REMOVE_TASK = 'REMOVE_TASK'
 const SET_NOTE = 'SET_NOTE'
 const SET_TAGS = 'SET_TAGS'
 
-const DEFAULT_TASKS = [
-	"Cleaned", 
-	"Built", 
-	"Primed", 
-	"Basecoat", 
-	"Painted", 
-	"Based", 
-	"Magnetized", 
-	"Lacquered",
-]
+const RESET_MODEL = 'RESET_MODEL'
 
 export const setModel = (model) => ({
 	type: SET_MODEL,
@@ -61,6 +52,10 @@ export const setTags = (tags) => ({
 	tags
 })
 
+export const resetModel = () => ({
+	type: RESET_MODEL
+})
+
 export const getModel = (model_id) => {
 	return async dispatch => {
 		await models.getModel(model_id,
@@ -72,13 +67,13 @@ export const getModel = (model_id) => {
 	}
 }
 
-export const getTasks = (model_id) => {
+export const getTasks = (model_id, defaultTasks) => {
 	return async dispatch => {
 		await tasks.getTasksByModel(model_id,
 			(_, {rows}) => {
 				if(rows['_array'].length==0){
 					//create default tasks
-					DEFAULT_TASKS.forEach(task=>{
+					defaultTasks.forEach(task=>{
 						dispatch(createTask(task, model_id, 1, 1))
 					})
 				}else{
@@ -265,6 +260,8 @@ export default function (state=initialModel, action){
 				},
 			}
 
+		case RESET_MODEL:
+			return initialModel
 		default:
 			return state
 	}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useRef} from 'react'
 import { render } from 'react-dom'
 import {View, 
   Text, 
@@ -9,12 +9,17 @@ import {View,
 import { TextInput } from 'react-native-gesture-handler'
 import styles from '../styles'
 
+import {taskValidation} from './input_validation'
+
 import TaskButtons from './TaskButtons'
 
 const EditTaskMenu = (props) => {
   const [newTask, setNewTask] = useState('')
-  const [valid, checkValid] = useState(true)
+  const [valid, checkValid] = useState(false)
   const [validMessage, changeMessage] = useState('')
+
+  let validCheck
+  const flatlistRef = useRef()
 
   renderItem = ({item}) => {
     let entry = props.taskLib[item]
@@ -61,7 +66,7 @@ const EditTaskMenu = (props) => {
     <View style={{
       alignItems: "center",
       width: '100%',
-      height: '60%',
+      height: '80%',
       backgroundColor: "#ddd",
       marginTop: 50,
       borderRadius: 10,
@@ -72,12 +77,21 @@ const EditTaskMenu = (props) => {
         onPress={props.cancelModal}
       />
       <FlatList
+        ref={flatlistRef}
         data={props.taskKeys}
         renderItem={renderItem}
         keyExtractor={item=>props.taskLib[item].id.toString()}
       />
       <Button
         title="Add new task"
+        disabled={!valid}
+        onPress={
+          ()=>{
+            setNewTask('')
+            props.editTaskButtons.addToAll(newTask, [])
+            setTimeout(()=>flatlistRef.current.scrollToEnd({animating: true}), 200)
+          }
+        }
       />
       <TextInput
         style={{
@@ -89,7 +103,20 @@ const EditTaskMenu = (props) => {
           marginTop: 2,
           marginBottom: 10,
         }}
+        value={newTask}
+        onChangeText = {text => {
+          setNewTask(text)
+          validCheck = taskValidation(text)
+          checkValid(validCheck.valid)
+          changeMessage(validCheck.message)
+        }}
       />
+      {validMessage?
+      (<Text
+        style={{color: 'red'}}
+      >
+        {validMessage}</Text>):
+      (<View></View>)}
     </View>
   )
 }

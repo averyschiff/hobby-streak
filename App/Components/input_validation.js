@@ -77,3 +77,23 @@ export const tagValidation = (tags, oldTags) => {
     message
   }
 }
+
+export const taskValidation = (task) => {
+  let valid = true
+  let message
+
+  if (!charsNumsSpaceComma.test(task)){
+    valid = false
+    message = 'Invalid characters'
+  }else if (task.length >= 100){
+    valid = false
+    message = 'Maximum length of all tags exceeded'
+  }
+  else if (task.length==0){
+    valid = false
+  }
+  return {
+    valid,
+    message
+  }
+}

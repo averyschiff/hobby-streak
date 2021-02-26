@@ -175,10 +175,12 @@ const initialUnit = {
   unit: {},
   models: [],
   tasks: {},
+  taskId: 0,
 }
 
 export default function (state=initialUnit, action){
   let unitTasks = {}, oldTotal, taskName
+  let id=state.taskId
   switch(action.type){
     case SET_UNIT:
       return {
@@ -215,7 +217,6 @@ export default function (state=initialUnit, action){
 				}
 			}
     case SET_UNIT_TASKS:
-      let id=0
       if (action.tasks.length>0){
         action.tasks.map(task=>{
           taskName = task.task
@@ -245,7 +246,8 @@ export default function (state=initialUnit, action){
       }
       return {
         ...state,
-        tasks: unitTasks
+        tasks: unitTasks,
+        taskId: id
       }
     case SET_UNIT_TASK_STATUS:
       unitTasks = {...state.tasks}
@@ -263,20 +265,30 @@ export default function (state=initialUnit, action){
 
       taskName = action.task
       unitTasks = {...state.tasks}
-      oldTotal = unitTasks[taskName].complete*unitTasks[taskName].count
+      if (taskName in unitTasks){
+        oldTotal = unitTasks[taskName].complete*unitTasks[taskName].count
 
-      let newCount = unitTasks[taskName].count+newModels.length
+        let newCount = unitTasks[taskName].count+newModels.length
 
-      unitTasks[taskName] = {
-        ...unitTasks[taskName],
-        count: newCount,
-        complete: oldTotal/newCount,
-        modelIds: [...unitTasks[taskName].modelIds, ...newModels]
+        unitTasks[taskName] = {
+          ...unitTasks[taskName],
+          count: newCount,
+          complete: oldTotal/newCount,
+          modelIds: [...unitTasks[taskName].modelIds, ...newModels]
+        }
+      } else {
+        unitTasks[taskName] = {
+          id: id++,
+          count: newModels.length,
+          complete: 0,
+          modelIds: newModels
+        }
       }
 
       return {
         ...state,
-        tasks: unitTasks
+        tasks: unitTasks,
+        taskId: id
       } 
     case REMOVE_TASK_FROM_UNIT:
       unitTasks = {...state.tasks}

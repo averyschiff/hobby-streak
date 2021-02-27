@@ -184,6 +184,7 @@ const initialUnit = {
 
 export default function (state=initialUnit, action){
   let unitTasks = {}, oldTotal, taskName
+  let prevItem
   let id=state.taskId
   let newDefault = state.defaultTasks
   switch(action.type){
@@ -199,12 +200,26 @@ export default function (state=initialUnit, action){
         models: action.models
       }
     case ADD_MODEL:
+
+      unitTasks = {...state.tasks}
+      Object.keys(unitTasks).forEach(task=>{
+        prevItem = unitTasks[task]
+        oldTotal = prevItem.complete*prevItem.count
+        unitTasks[task] = {
+          ...prevItem,
+          count: prevItem.count+1,
+          complete: (oldTotal)/(prevItem.count+1),
+          modelIds: [...prevItem.modelIds, action.model.id]
+        }
+      })
+
       return {
         ...state,
         models: [
           ...state.models,
           action.model
         ],
+        tasks: unitTasks
       }
     case REMOVE_MODEL:
       return {

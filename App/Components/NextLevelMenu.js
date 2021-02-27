@@ -92,6 +92,7 @@ const NextLevelMenu = (props) => {
             defaultName={
               props.defaultName
             }
+            defLength={props.defLength}
             cancelModal={props.cancelModal}
             newItem={props.newItem}
             modalText={props.modalText}

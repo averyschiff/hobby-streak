@@ -51,8 +51,9 @@ export class AllArmies extends React.Component{
         modalVisible = {this.state.modalVisible}
         modalType = {this.state.modalType}
         defaultName={
-          ``
+          `Army`
         }
+        defLength={this.props.armies.length+1}
         cancelModal={this.cancelModal}
         newItem={this.newArmy}
         modalText={'New army name:'}

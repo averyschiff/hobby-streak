@@ -59,8 +59,9 @@ export class SingleArmy extends React.Component{
           modalVisible = {this.state.modalVisible}
           modalType = {this.state.modalType}
           defaultName={
-            ``
+            `Unit`
           }
+          defLength={this.props.units.length+1}
           cancelModal={this.cancelModal}
           newItem={this.newUnit}
           modalText={'New unit name:'}

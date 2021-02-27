@@ -85,8 +85,9 @@ export class SingleUnit extends React.Component{
           modalVisible = {this.state.modalVisible}
           modalType = {this.state.modalType}
           defaultName={
-            `Model ${this.props.models.length+1}`
+            `Model`
           }
+          defLength={this.props.models.length+1}
           cancelModal={this.cancelModal}
           newItem={this.newModel}
           modalText={'New model name:'}

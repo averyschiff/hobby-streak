@@ -10,7 +10,7 @@ import {View,
 const NewItemForm = (props) => {
   const [newNames, setNames] = useState([{
     id: 0,
-    text: props.defaultName,
+    text: `${props.defaultName} ${props.defLength}` ,
     valid: true,
     validMessage: ''
   }])
@@ -63,7 +63,13 @@ const NewItemForm = (props) => {
             {item.validMessage}</Text>):
           (<View></View>)}
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={()=>{
+            setNames(newNames.filter(newName=>{
+              return newName.id!=item.id
+            }))
+          }}
+        >
           <Text style={{fontSize: 20, padding: 3}}>x</Text>
         </TouchableOpacity>
       </View>
@@ -77,7 +83,7 @@ const NewItemForm = (props) => {
       alignContent: "center",
       alignSelf: "center",
       width: '90%',
-      height: '60%',
+      height: '70%',
       backgroundColor: "#bbb",
       marginTop: 50,
       borderRadius: 10,
@@ -91,7 +97,7 @@ const NewItemForm = (props) => {
         {props.modalText}
       </Text>
       <FlatList
-        style={{width: '80%'}}
+        style={{width: '80%', paddingBottom: 5}}
         data={newNames}
         renderItem={renderItem}
         keyExtractor={item=>item.id.toString()}
@@ -99,11 +105,12 @@ const NewItemForm = (props) => {
           <Button
             title={'Additional model'}
             onPress={()=>{
+              let newId = newNames.length>0?newNames[newNames.length-1].id+1:0
               setNames(
                 [...newNames,
                 {
-                  id: newNames[newNames.length-1].id+1,
-                  text: props.defaultName,
+                  id: newId,
+                  text: `${props.defaultName} ${props.defLength+newId}`,
                   valid: true,
                   validMessage: '',
                 }]

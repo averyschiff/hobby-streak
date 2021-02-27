@@ -1,12 +1,74 @@
 import React, {useState} from 'react'
-import {View, TextInput, Text, Button} from 'react-native'
+import {View, 
+  TextInput, 
+  Text, 
+  Button,
+  FlatList,
+  TouchableOpacity
+} from 'react-native'
 
 const NewItemForm = (props) => {
-  const [newName, setName] = useState(props.defaultName)
-  const [valid, checkValid] = useState(props.defaultName.length>0)
-  const [validMessage, changeMessage] = useState('')
+  const [newNames, setNames] = useState([{
+    id: 0,
+    text: props.defaultName,
+    valid: true,
+    validMessage: ''
+  }])
 
-  let validCheck
+  renderItem = ({item}) => {
+    let validCheck
+    return(
+      <View 
+        style={{
+          padding: 5,
+          margin: 10,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Text style={{fontSize: 20}}>
+          {item.id+1}.
+        </Text>
+        <View>
+          <TextInput
+            style={{
+              padding: 6,
+              borderColor: 'black',
+              borderWidth: 1,
+              backgroundColor:"#fff",
+              fontSize: 20,
+            }}
+            multiline={true}
+            value={item.text}
+            onChangeText = {text=>{
+              validCheck = props.validation(text)
+              setNames([
+                ...newNames.slice(0,item.id),
+                {
+                  ...item,
+                  text,
+                  valid: validCheck.valid,
+                  validMessage: validCheck.message
+                },
+                ...newNames.slice(item.id+1)
+              ])
+            }}
+          >
+          </TextInput>
+          {!item.valid?
+          (<Text
+            style={{color: 'red'}}
+          >
+            {item.validMessage}</Text>):
+          (<View></View>)}
+        </View>
+        <TouchableOpacity>
+          <Text style={{fontSize: 20, padding: 3}}>x</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
   return(
     <View style={{
@@ -14,8 +76,8 @@ const NewItemForm = (props) => {
       justifyContent: "space-around",
       alignContent: "center",
       alignSelf: "center",
-      width: '75%',
-      height: '50%',
+      width: '90%',
+      height: '60%',
       backgroundColor: "#bbb",
       marginTop: 50,
       borderRadius: 10,
@@ -28,43 +90,43 @@ const NewItemForm = (props) => {
       >
         {props.modalText}
       </Text>
-      <TextInput
-        style={{
-          padding: 2,
-          borderColor: 'black',
-          borderWidth: 1,
-          width: "90%",
-          backgroundColor:"#fff",
-          fontSize: 20,
-        }}
-        multiline={true}
-        value={newName}
-        onChangeText = {text=>{
-          setName(text)
-          validCheck = props.validation(text)
-          checkValid(validCheck.valid)
-          changeMessage(validCheck.message)
-        }}
-      >
-      </TextInput>
-      {!valid?
-      (<Text
-        style={{color: 'red'}}
-      >
-        {validMessage}</Text>):
-      (<View></View>)}
+      <FlatList
+        style={{width: '80%'}}
+        data={newNames}
+        renderItem={renderItem}
+        keyExtractor={item=>item.id.toString()}
+        ListFooterComponent={
+          <Button
+            title={'Additional model'}
+            onPress={()=>{
+              setNames(
+                [...newNames,
+                {
+                  id: newNames[newNames.length-1].id+1,
+                  text: props.defaultName,
+                  valid: true,
+                  validMessage: '',
+                }]
+              )
+            }}
+          />
+        }
+      />
       <View
       style={{
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '80%'
+        width: '80%',
+        paddingBottom: 5,
       }}>
         <Button
           title="Submit"
-          disabled={!valid}
+          disabled={newNames.reduce((res, entry)=>res || !entry.valid, false)}
           onPress={
             ()=>{
-              props.newItem(newName)
+              newNames.map(newName=>{
+                props.newItem(newName.text)
+              })
               props.cancelModal()
             }
           }

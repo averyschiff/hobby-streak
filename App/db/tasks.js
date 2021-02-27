@@ -14,6 +14,29 @@ function newTask(task, model_id, unit_id, army_id, callback, errorHandler){
   )
 }
 
+function newTasks(tasks, model_id, unit_id, army_id, callback, errorHandler){
+	let argsArray = []
+	let builtQuery = "INSERT INTO tasks (task, model_id, unit_id, army_id) VALUES "
+	tasks.map(task=>{
+		builtQuery += '(?, ?, ?, ?), '
+		argsArray.push(task)
+		argsArray.push(model_id)
+		argsArray.push(unit_id)
+		argsArray.push(army_id)
+	})
+	builtQuery = builtQuery.slice(0,-2)
+	db.transaction(
+		tx => {
+			tx.executeSql(
+				builtQuery,
+				argsArray,
+				callback,
+				errorHandler
+			)
+		}
+	)  
+}
+
 function addTasksThroughUnit(task, unit_id, army_id, modelsToAdd, callback, errorHandler){
 	let argsArray = []
 	let builtQuery = "INSERT INTO tasks (task, model_id, unit_id, army_id) VALUES "
@@ -218,6 +241,7 @@ function deleteTasksByArmy(army_id, callback, errorHandler){
 }
 export default{
 	newTask,
+	newTasks,
 	addTasksThroughUnit,
 	updateTaskTrue,
 	updateTaskFalse,

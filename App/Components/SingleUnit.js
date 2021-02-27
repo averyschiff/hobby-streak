@@ -52,6 +52,7 @@ export class SingleUnit extends React.Component{
   newModel = (modelName) => {
     this.props.createModel(
       modelName, 
+      this.props.defaults,
       this.props.unit.id, 
       this.props.unit.army_id
     )
@@ -141,8 +142,8 @@ const mapDispatch = dispatch => ({
   getModels: (unit_id)=>{
     dispatch(getModels(unit_id))
   },
-  createModel: (modelName, unit_id, army_id)=>{
-    dispatch(createModel(modelName, unit_id, army_id))
+  createModel: (modelName, defaultTasks, unit_id, army_id)=>{
+    dispatch(createModel(modelName, defaultTasks, unit_id, army_id))
   },
   deleteModel: (model_id)=>{
     dispatch(deleteModel(model_id))

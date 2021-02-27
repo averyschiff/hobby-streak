@@ -67,18 +67,12 @@ export const getModel = (model_id) => {
 	}
 }
 
+//TODO: Remove defaultTasks
 export const getTasks = (model_id, defaultTasks) => {
 	return async dispatch => {
 		await tasks.getTasksByModel(model_id,
 			(_, {rows}) => {
-				if(rows['_array'].length==0){
-					//create default tasks
-					defaultTasks.forEach(task=>{
-						dispatch(createTask(task, model_id, 1, 1))
-					})
-				}else{
-					dispatch(setTasks(rows['_array']))
-				}
+				dispatch(setTasks(rows['_array']))
 			},
 			(_, err) => {alert('Error retrieving tasks: ' + err)}
 		)

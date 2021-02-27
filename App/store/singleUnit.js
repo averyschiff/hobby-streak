@@ -79,14 +79,19 @@ export const getModels = (unit_id) => {
   }
 }
 
-export const createModel = (modelName, unit_id, army_id) => {
+export const createModel = (modelName, defaultTasks, unit_id, army_id) => {
 	return async dispatch => {
 		await models.newModel(modelName, unit_id, army_id,
 			(_, {insertId}) => {
-				dispatch(addModel({
-          id: insertId, 
-          modelName
-				}))
+        tasks.newTasks(defaultTasks, insertId, unit_id, army_id,
+          (_, {rows})=>{
+              dispatch(addModel({
+                id: insertId, 
+                modelName
+              }))
+            },
+          (_, err)=>{alert('Error adding tasks to new model: ' + err)}
+        )
 			},
 			(_, err) => {alert('Error creating model: ' + err)}
 		)

@@ -150,6 +150,8 @@ export const addTasksThroughUnit = (unit_id, army_id, task, toAdd) => {
         },
         (_, err)=>{alert('Error add tasks to models: ' + err)}
       )
+    }else{
+      dispatch(addTaskToModels(toAdd, task))
     }
   }
 }

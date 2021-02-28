@@ -74,6 +74,8 @@ function createUnitTable(callback,sample=false){
 				"NOT NULL, " +
 			"completion REAL " +
 				"DEFAULT 0.0 CHECK (completion >= 0.0 AND completion <= 1.0), " +
+			"note TEXT, " +
+			"tags TEXT, " +
 			"army_id INTEGER " +
 				"NOT NULL, " +
 			"FOREIGN KEY (army_id) " +

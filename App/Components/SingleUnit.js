@@ -15,6 +15,7 @@ import {
   updateTasksStatusByUnit,
   addTasksThroughUnit,
   deleteTaskByUnit,
+  updateTags,
 } from '../store/singleUnit'
 import NextLevelMenu from './NextLevelMenu'
 import {modelValidation} from './input_validation'
@@ -119,6 +120,16 @@ export class SingleUnit extends React.Component{
           note={this.props.unit.note}
           setNote={this.props.setNote}
           updateNote={(note)=>updateNote(note, this.props.unit.id)}
+          tagsSection={true}
+          tags={this.props.unit.tags}
+          updateTags={(tags, oldTags)=>{
+            this.props.updateTags(tags, oldTags, this.props.unit.id)
+          }}
+          addTags = {(tags)=>{
+            this.props.updateTags(tags, 
+              this.props.unit.tags, 
+              this.props.unit.id)}
+            }
         />):
       (<View>
         <Text>Single unit view</Text>
@@ -163,6 +174,9 @@ const mapDispatch = dispatch => ({
   },
   deleteTask: (unit_id, task)=>{
     dispatch(deleteTaskByUnit(unit_id, task))
+  },
+  updateTags: (tags, oldTags, unit_id)=>{
+    dispatch(updateTags(tags, oldTags, unit_id))
   }
 })
 

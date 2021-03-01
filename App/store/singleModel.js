@@ -7,7 +7,7 @@ const TOGGLE_TASK = 'TOGGLE_TASK'
 const ADD_TASK = 'ADD_TASK'
 const REMOVE_TASK = 'REMOVE_TASK'
 const SET_NOTE = 'SET_NOTE'
-const SET_TAGS = 'SET_TAGS'
+const SET_TAGS = 'SET_MODEL_TAGS'
 
 const RESET_MODEL = 'RESET_MODEL'
 
@@ -153,7 +153,7 @@ export const updateTags = (tags, oldTags, model_id) => {
 				dispatch(setTags(newTags))
 			},
 			(_, err)=> {
-				console.log('Error updating note: ' + err)
+				console.log('Error updating tags: ' + err)
 			}
 		)
 	}

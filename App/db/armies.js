@@ -27,6 +27,19 @@ function updateArmyNote(note, army_id, callback, errorHandler){
 	)
 }
 
+function updateArmyTags(tags, army_id, callback, errorHandler){
+	db.transaction(
+		tx=>{
+			tx.executeSql(
+				"UPDATE armies SET tags = ? where id = ?",
+				[tags, army_id],
+				callback,
+				errorHandler
+			)
+		}
+	)
+}
+
 function getArmy(army_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
@@ -81,11 +94,28 @@ function addNotesColumn(callback, errorHandler){
 	)
 }
 
+function addTagsColumn(callback, errorHandler){
+	const query = "ALTER TABLE armies " + 
+	"ADD COLUMN tags TEXT"
+	db.transaction(
+		tx=>{
+			tx.executeSql(
+				query,
+				[],
+				callback,
+				errorHandler
+			)
+		}
+	)
+}
+
 export default{
 	newArmy,
 	updateArmyNote,
+	updateArmyTags,
 	getArmy,
 	getAllArmies,
 	deleteArmy,
 	addNotesColumn,
+	addTagsColumn,
 }

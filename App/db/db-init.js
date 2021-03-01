@@ -53,6 +53,8 @@ function createArmyTable(callback, sample=false){
 				"PRIMARY KEY NOT NULL, " +
 			"armyName VARCHAR " +
 				"NOT NULL, " +
+			"note TEXT, " +
+			"tags TEXT, " +
 			"completion REAL " +
 				"DEFAULT 0.0 CHECK (completion >= 0.0 AND completion <= 1.0))"
 	const insertArmy = "INSERT INTO armies (armyName) values(?)"

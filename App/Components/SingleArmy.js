@@ -11,6 +11,7 @@ import {
   deleteUnit,
   setNote,
   updateNote,
+  updateTags,
 } from '../store/singleArmy'
 import NextLevelMenu from './NextLevelMenu'
 import {unitValidation} from './input_validation'
@@ -79,6 +80,16 @@ export class SingleArmy extends React.Component{
           note={this.props.army.note}
           setNote={this.props.setNote}
           updateNote={(note)=>updateNote(note, this.props.army.id)}
+          tagsSection={true}
+          tags={this.props.army.tags}
+          updateTags={(tags, oldTags)=>{
+            this.props.updateTags(tags, oldTags, this.props.army.id)
+          }}
+          addTags = {(tags)=>{
+            this.props.updateTags(tags, 
+              this.props.army.tags, 
+              this.props.army.id)}
+            }
         />):
       (<View>
         <Text>Single army view</Text>
@@ -110,6 +121,9 @@ const mapDispatch = dispatch => ({
   setNote: (note)=>{
     dispatch(setNote(note))
   },
+	updateTags: (tags, oldTags, army_id)=>{
+		dispatch(updateTags(tags, oldTags, army_id))
+	},
 })
 
 export default connect(mapState, mapDispatch)(SingleArmy)

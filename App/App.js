@@ -50,6 +50,8 @@ export default class App extends React.Component{
 		FOR MIGRATIONS*/
 		//units.addNotesColumn(null, null)
 		//armies.addNotesColumn(null,null)
+		units.addTagsColumn(null, null)
+		armies.addTagsColumn(null, null)
 
 		this.dbTest()
 	}

@@ -37,12 +37,12 @@ const TagsList = (props) => {
   return(
     <View
       style={{
-        flex:1,
         flexDirection:'column',
         width: 250,
       }}
     >
       {tagRows.map(tags=>{
+        console.log('tags: ',tags)
         return (<TagRow 
           tags={tags}
           key={count++}

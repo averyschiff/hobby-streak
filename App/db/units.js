@@ -27,6 +27,19 @@ function updateUnitNote(note, unit_id, callback, errorHandler){
 	)
 }
 
+function updateUnitTags(tags, unit_id, callback, errorHandler){
+	db.transaction(
+		tx=>{
+			tx.executeSql(
+				"UPDATE units SET tags = ? where id = ?",
+				[tags, unit_id],
+				callback,
+				errorHandler
+			)
+		}
+	)
+}
+
 function getUnit(unit_id, callback, errorHandler){
 	db.transaction(
 		tx=>{
@@ -106,13 +119,31 @@ function addNotesColumn(callback, errorHandler){
 		}
 	)
 }
+
+function addTagsColumn(callback, errorHandler){
+	const query = "ALTER TABLE units " + 
+	"ADD COLUMN tags TEXT"
+	db.transaction(
+		tx=>{
+			tx.executeSql(
+				query,
+				[],
+				callback,
+				errorHandler
+			)
+		}
+	)
+}
+
 export default{
 	newUnit,
 	updateUnitNote,
+	updateUnitTags,
 	getUnit,
 	getUnitsByArmy,
 	getAllUnits,
 	deleteUnit,
 	deleteUnitsByArmy,
 	addNotesColumn,
+	addTagsColumn,
 }

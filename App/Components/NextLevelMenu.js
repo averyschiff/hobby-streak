@@ -18,7 +18,10 @@ import {
   Button,
 } from 'react-native'
 
+import {tagValidation} from './input_validation'
+
 import NoteBox from './NoteBox'
+import TagsList from './TagsList'
 
 
 /*
@@ -98,15 +101,30 @@ const NextLevelMenu = (props) => {
             modalText={props.modalText}
             validation={props.newValidation}
           />):
-          (props.tasks?
-          (<EditTaskMenu 
-            taskKeys={Object.keys(props.tasks)}
-            taskLib = {props.tasks}
-            editTaskButtons={props.editTaskButtons}
-            cancelModal={props.cancelModal}
-            />):
-            (<View></View>)
+          (props.modalType=='addTags'?
+            (props.tagsSection?
+              (<NewItemForm
+                defaultName={''}
+                cancelModal={props.cancelModal}
+                newItem={props.addTags}
+                modalText={'Enter new tags, separated by commas'}
+                validation={
+                  (tags)=>tagValidation(tags, props.tags)
+                }
+              />):
+              (<View></View>)
+              ):
+            (props.tasks?
+            (<EditTaskMenu 
+              taskKeys={Object.keys(props.tasks)}
+              taskLib = {props.tasks}
+              editTaskButtons={props.editTaskButtons}
+              cancelModal={props.cancelModal}
+              />):
+              (<View></View>)
+            )
           )
+          
         }
       </Modal>
       <View>
@@ -135,6 +153,28 @@ const NextLevelMenu = (props) => {
             updateNote={props.updateNote}
           />):
           (<View></View>)
+        }
+        {props.tagsSection?
+        (
+          <View
+            style={{alignItems: 'center'}}
+          >
+            <TagsList
+              tagList={props.tags}
+              updateTags={(tags)=>{
+                props.updateTags(tags, '')
+              }}
+            />
+            <TouchableOpacity
+              onPress={()=>{
+                props.setModalVisible('addTags')
+              }}>
+                <Text>Add tags...</Text>
+            </TouchableOpacity>
+
+          </View>
+        ):
+        (<View></View>)
         }
       </View>
     </View>

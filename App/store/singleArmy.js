@@ -5,6 +5,7 @@ const SET_UNITS = 'SET_UNITS'
 const ADD_UNIT = 'ADD_UNIT'
 const REMOVE_UNIT = 'REMOVE_UNIT'
 const SET_NOTE = 'SET_NOTE'
+const SET_TAGS = 'SET_ARMY_TAGS'
 
 export const setArmy = (army) => ({
   type: SET_ARMY,
@@ -29,6 +30,11 @@ export const removeUnit = (unit_id) => ({
 export const setNote = (note) => ({
 	type: SET_NOTE,
 	note
+})
+
+export const setTags = (tags) => ({
+  type: SET_TAGS,
+  tags
 })
 
 export const getArmy = (army_id) => {
@@ -90,6 +96,21 @@ export const updateNote = async (note, army_id) => {
 		(_, err)=> {alert('Error updating note: ' + err)}
 	)
 }
+export const updateTags = (tags, oldTags, army_id) => {
+	let newTags = ''
+	if (oldTags) newTags = oldTags + tags + ', '
+	else if (tags) newTags = tags + ', '
+	return async dispatch => {
+		await armies.updateArmyTags(newTags, army_id,
+			(_, rows) => {
+				dispatch(setTags(newTags))
+			},
+			(_, err)=> {
+				console.log('Error updating tags: ' + err)
+			}
+		)
+	}
+}
 
 const initialArmy = {
   army: {},
@@ -132,6 +153,14 @@ export default function (state=initialArmy, action){
 					note: action.note
 				}
 			}
+    case SET_TAGS:
+      return {
+        ...state,
+        army: {
+          ...state.army,
+          tags: action.tags
+        }
+      }
     default:
       return state
   }

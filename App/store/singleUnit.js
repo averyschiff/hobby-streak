@@ -9,6 +9,7 @@ const SET_UNIT_TASKS = 'SET_UNIT_TASKS'
 const SET_UNIT_TASK_STATUS = 'SET_UNIT_TASK_STATUS'
 const ADD_UNIT_TASKS_TO_MODELS = 'ADD_UNIT_TASKS_TO_MODELS'
 const REMOVE_TASK_FROM_UNIT = 'REMOVE_TASK_FROM_UNIT'
+const SET_TAGS = 'SET_UNIT_TAGS'
 
 export const setUnit = (unit) => ({
   type: SET_UNIT,
@@ -55,6 +56,11 @@ export const addTaskToModels = (models, task) => ({
 export const removeTaskFromUnit = (task) => ({
   type: REMOVE_TASK_FROM_UNIT,
   task
+})
+
+export const setTags = (tags) => ({
+  type: SET_TAGS,
+  tags
 })
 
 export const getUnit = (unit_id) => {
@@ -117,6 +123,22 @@ export const updateNote = async (note, unit_id) => {
 		null,
 		(_, err)=> {alert('Error updating note: ' + err)}
 	)
+}
+
+export const updateTags = (tags, oldTags, unit_id) => {
+	let newTags = ''
+	if (oldTags) newTags = oldTags + tags + ', '
+	else if (tags) newTags = tags + ', '
+	return async dispatch => {
+		await units.updateUnitTags(newTags, unit_id,
+			(_, rows) => {
+				dispatch(setTags(newTags))
+			},
+			(_, err)=> {
+				console.log('Error updating tags: ' + err)
+			}
+		)
+	}
 }
 
 export const getUnitTasks = (unit_id) => {
@@ -238,6 +260,14 @@ export default function (state=initialUnit, action){
 					note: action.note
 				}
 			}
+    case SET_TAGS:
+      return {
+        ...state,
+        unit: {
+          ...state.unit,
+          tags: action.tags
+        }
+      }
     case SET_UNIT_TASKS:
       if (action.tasks.length>0){
         action.tasks.map(task=>{

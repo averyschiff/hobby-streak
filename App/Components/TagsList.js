@@ -42,7 +42,6 @@ const TagsList = (props) => {
       }}
     >
       {tagRows.map(tags=>{
-        console.log('tags: ',tags)
         return (<TagRow 
           tags={tags}
           key={count++}

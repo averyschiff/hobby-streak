@@ -39,7 +39,7 @@ export const setTags = (tags) => ({
 
 export const getArmy = (army_id) => {
   return async dispatch => {
-		await armies.getArmy(army_id,
+		await armies.getEntry(army_id,
 			(_, {rows}) => {
 				dispatch(setArmy(rows.item(0)))
 			},
@@ -50,7 +50,7 @@ export const getArmy = (army_id) => {
 
 export const getUnits = (army_id) => {
   return async dispatch => {
-		await units.getUnitsByArmy(army_id,
+		await units.getEntryByHigher("army", army_id,
 			(_, {rows}) => {
 				dispatch(setUnits(rows['_array']))
 			},
@@ -75,9 +75,9 @@ export const createUnit = (unitName, army_id) => {
 
 export const deleteUnit = (unit_id) => {
   return async dispatch => {
-    await tasks.deleteTasksByUnit(unit_id,
-      models.deleteModelsByUnit(unit_id,
-        units.deleteUnit(unit_id,
+    await tasks.deleteEntryByHigher("unit", unit_id,
+      models.deleteEntryByHigher("unit", unit_id,
+        units.deleteEntry(unit_id,
           (_, {}) => {
             dispatch(removeUnit(unit_id))
           },
@@ -91,7 +91,7 @@ export const deleteUnit = (unit_id) => {
 }
 
 export const updateNote = async (note, army_id) => {
-	await armies.updateArmyNote(note, army_id,
+	await armies.updateVal("note", note, army_id,
 		null,
 		(_, err)=> {alert('Error updating note: ' + err)}
 	)
@@ -101,7 +101,7 @@ export const updateTags = (tags, oldTags, army_id) => {
 	if (oldTags) newTags = oldTags + tags + ', '
 	else if (tags) newTags = tags + ', '
 	return async dispatch => {
-		await armies.updateArmyTags(newTags, army_id,
+		await armies.updateVal("tags", newTags, army_id,
 			(_, rows) => {
 				dispatch(setTags(newTags))
 			},

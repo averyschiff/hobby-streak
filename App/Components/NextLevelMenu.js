@@ -4,6 +4,8 @@ import styles from '../styles'
 import NewItemForm from './NewItemForm'
 import EditTaskMenu from './EditTaskMenu'
 
+import * as Progress from 'react-native-progress'
+
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import Menu, {
   MenuOptions,
@@ -81,6 +83,7 @@ const NextLevelMenu = (props) => {
           <MenuOption value={false} text='Cancel'/>
         </MenuOptions>
       </Menu>
+      <Text>{item.completion}</Text>
     </View>
   )
   return(

@@ -65,7 +65,7 @@ export const setTags = (tags) => ({
 
 export const getUnit = (unit_id) => {
   return async dispatch => {
-		await units.getUnit(unit_id,
+		await units.getEntry(unit_id,
 			(_, {rows}) => {
 				dispatch(setUnit(rows.item(0)))
 			},
@@ -76,7 +76,7 @@ export const getUnit = (unit_id) => {
 
 export const getModels = (unit_id) => {
   return async dispatch => {
-		await models.getModelsByUnit(unit_id,
+		await models.getEntryByHigher("unit", unit_id,
 			(_, {rows}) => {
 				dispatch(setModels(rows['_array']))
 			},
@@ -106,8 +106,8 @@ export const createModel = (modelName, defaultTasks, unit_id, army_id) => {
 
 export const deleteModel = (model_id) => {
   return async dispatch => {
-    await tasks.deleteTasksByModel(model_id,
-      await models.deleteModel(model_id,
+    await tasks.deleteEntryByHigher("model", model_id,
+      await models.deleteEntry(model_id,
         (_, {}) => {
           dispatch(removeModel(model_id))
         },
@@ -119,7 +119,7 @@ export const deleteModel = (model_id) => {
 }
 
 export const updateNote = async (note, unit_id) => {
-	await units.updateUnitNote(note, unit_id,
+	await units.updateVal("note", note, unit_id,
 		null,
 		(_, err)=> {alert('Error updating note: ' + err)}
 	)
@@ -130,7 +130,7 @@ export const updateTags = (tags, oldTags, unit_id) => {
 	if (oldTags) newTags = oldTags + tags + ', '
 	else if (tags) newTags = tags + ', '
 	return async dispatch => {
-		await units.updateUnitTags(newTags, unit_id,
+		await units.updateVal("tags", newTags, unit_id,
 			(_, rows) => {
 				dispatch(setTags(newTags))
 			},
@@ -143,7 +143,7 @@ export const updateTags = (tags, oldTags, unit_id) => {
 
 export const getUnitTasks = (unit_id) => {
   return async dispatch => {
-    await tasks.getTasksByUnit(unit_id,
+    await tasks.getEntryByHigher("unit", unit_id,
       (_, {rows})=>{
         dispatch(setTasks(rows['_array']))
       },

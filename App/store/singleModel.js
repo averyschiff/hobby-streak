@@ -58,7 +58,7 @@ export const resetModel = () => ({
 
 export const getModel = (model_id) => {
 	return async dispatch => {
-		await models.getModel(model_id,
+		await models.getEntry(model_id,
 			(_, {rows}) => {
 				dispatch(setModel(rows.item(0)))
 			},
@@ -70,9 +70,20 @@ export const getModel = (model_id) => {
 //TODO: Remove defaultTasks
 export const getTasks = (model_id, defaultTasks) => {
 	return async dispatch => {
-		await tasks.getTasksByModel(model_id,
+		await tasks.getEntryByHigher("model",model_id,
 			(_, {rows}) => {
-				dispatch(setTasks(rows['_array']))
+				let allTasks = rows['_array']
+				let completion  = 0
+				allTasks.forEach(task=>{
+					if (task.complete) completion++
+				})
+				completion = completion/allTasks.length
+				models.updateVal('completion', completion, model_id,
+					(_, {rows})=>{
+						dispatch(setTasks(allTasks))
+					},
+					(_, err)=>{alert('Error updating model completion: ' + err)}
+					)
 			},
 			(_, err) => {alert('Error retrieving tasks: ' + err)}
 		)
@@ -97,14 +108,14 @@ export const createTask = (taskName, model_id, unit_id, army_id) => {
 export const updateTask = (task_id, value) => {
 	return async dispatch => {
 		if (value){
-			await tasks.updateTaskTrue(task_id,
+			await tasks.updateVal("complete", 1, task_id,
 				(_, rows) => {
 					dispatch(toggleTask(task_id, value))
 				},
 				(_, err) => {alert('Error updating task: ' + err)}
 			)
 		}else{
-			await tasks.updateTaskFalse(task_id,
+			await tasks.updateVal("complete", 0, task_id,
 				(_, rows) => {
 					dispatch(toggleTask(task_id, value))
 				},
@@ -116,7 +127,7 @@ export const updateTask = (task_id, value) => {
 
 export const deleteTask = (task_id)=>{
 	return async dispatch => {
-		await tasks.deleteTask(task_id,
+		await tasks.deleteEntry(task_id,
 			(_, rows) => {
 				dispatch(removeTask(task_id))
 			},
@@ -126,7 +137,7 @@ export const deleteTask = (task_id)=>{
 }
 
 export const updateNote = async (note, model_id) => {
-	await models.updateModelNote(note, model_id,
+	await models.updateVal('note', note, model_id,
 		null,
 		(_, err)=> {alert('Error updating note: ' + err)}
 	)
@@ -134,7 +145,7 @@ export const updateNote = async (note, model_id) => {
 
 export const updateModelName = (newName, model_id) => {
 	return async dispatch => {
-		await models.updateModelName(newName, model_id,
+		await models.updateVal('modelName', newName, model_id,
 			(_, {rows}) => {
 				dispatch(setModelName(newName))
 			},
@@ -148,7 +159,7 @@ export const updateTags = (tags, oldTags, model_id) => {
 	if (oldTags) newTags = oldTags + tags + ', '
 	else if (tags) newTags = tags + ', '
 	return async dispatch => {
-		await models.updateModelTags(newTags, model_id,
+		await models.updateVal('tags', newTags, model_id,
 			(_, rows) => {
 				dispatch(setTags(newTags))
 			},

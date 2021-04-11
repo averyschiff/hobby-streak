@@ -21,7 +21,7 @@ export const removeArmy = (army_id) => ({
 
 export const getArmies = () => {
   return async dispatch => {
-		await armies.getAllArmies(
+		await armies.getAllEntries(
 			(_, {rows}) => {
 				dispatch(setArmies(rows['_array']))
 			},
@@ -46,10 +46,10 @@ export const createArmy = (armyName) => {
 
 export const deleteArmy = (army_id) => {
   return async dispatch => {
-    await tasks.deleteTasksByArmy(army_id,
-      models.deleteModelsByArmy(army_id,
-        units.deleteUnitsByArmy(army_id,
-          armies.deleteArmy(army_id,
+    await tasks.deleteEntryByHigher("army", army_id,
+      models.deleteEntryByHigher("army", army_id,
+        units.deleteEntryByHigher("army", army_id,
+          armies.deleteEntry(army_id,
             (_, {}) => {
               dispatch(removeArmy(army_id))
             },

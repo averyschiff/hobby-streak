@@ -95,6 +95,7 @@ export class SingleUnit extends React.Component{
           newValidation={modelValidation}
           topName={this.props.unit.unitName}
           listData={this.props.models}
+          progressCircles={true}
           newButtonText={'New Model'}
           setModalVisible={(modalType)=>{
             this.setState({

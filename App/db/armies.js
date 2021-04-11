@@ -1,121 +1,20 @@
 import * as SQLite from 'expo-sqlite'
 const db = SQLite.openDatabase("hobby.db")
+import BaseEndpoint from './BaseDB'
 
-function newArmy(armyName, callback, errorHandler){
-  db.transaction(
-    tx => {
-      tx.executeSql(
-	      "INSERT INTO armies (armyName) VALUES(?)",
-	      [armyName],
-	      callback,
-	      errorHandler
-      )
-    }
-  )
+class armyEndpoint extends BaseEndpoint{
+	newArmy(armyName, callback, errorHandler){
+		db.transaction(
+			tx => {
+				tx.executeSql(
+					"INSERT INTO armies (armyName) VALUES(?)",
+					[armyName],
+					callback,
+					errorHandler
+				)
+			}
+		)
+	}
 }
 
-function updateArmyNote(note, army_id, callback, errorHandler){
-	db.transaction(
-		tx=>{
-			tx.executeSql(
-				"UPDATE armies SET note = ? WHERE id = ?",
-				[note, army_id],
-				callback,
-				errorHandler
-			)
-		}
-	)
-}
-
-function updateArmyTags(tags, army_id, callback, errorHandler){
-	db.transaction(
-		tx=>{
-			tx.executeSql(
-				"UPDATE armies SET tags = ? where id = ?",
-				[tags, army_id],
-				callback,
-				errorHandler
-			)
-		}
-	)
-}
-
-function getArmy(army_id, callback, errorHandler){
-	db.transaction(
-		tx=>{
-			tx.executeSql(
-				"SELECT * FROM armies WHERE id = ?",
-				[army_id],
-				callback,
-				errorHandler
-			)
-		}
-	)
-}
-
-function getAllArmies(callback, errorHandler){
-	db.transaction(
-		tx=>{
-			tx.executeSql(
-				"SELECT * FROM armies",
-				[],
-				callback,
-				errorHandler
-			)
-		}
-	)
-}
-
-function deleteArmy(army_id, callback, errorHandler){
-	db.transaction(
-		tx=>{
-			tx.executeSql(
-				"DELETE FROM armies WHERE id = ?",
-				[army_id],
-				callback,
-				errorHandler
-			)
-		}
-	)
-}
-
-function addNotesColumn(callback, errorHandler){
-	const query = "ALTER TABLE armies " + 
-	"ADD COLUMN note TEXT"
-	db.transaction(
-		tx=>{
-			tx.executeSql(
-				query,
-				[],
-				callback,
-				errorHandler
-			)
-		}
-	)
-}
-
-function addTagsColumn(callback, errorHandler){
-	const query = "ALTER TABLE armies " + 
-	"ADD COLUMN tags TEXT"
-	db.transaction(
-		tx=>{
-			tx.executeSql(
-				query,
-				[],
-				callback,
-				errorHandler
-			)
-		}
-	)
-}
-
-export default{
-	newArmy,
-	updateArmyNote,
-	updateArmyTags,
-	getArmy,
-	getAllArmies,
-	deleteArmy,
-	addNotesColumn,
-	addTagsColumn,
-}
+export default new armyEndpoint("armies")

@@ -44,15 +44,6 @@ export default class App extends React.Component{
 		dbInit.createModelTable(this.incrementTables,false)
 		dbInit.createTaskTable(this.incrementTables,false)
 
-		/*GET RID OF THIS IN FINAL PRODUCT
-		CURRENTLY SQUASHES AN ERROR IF THE
-		COLUMN ALREADY EXISTS, ONLY NECESSARY
-		FOR MIGRATIONS*/
-		//units.addNotesColumn(null, null)
-		//armies.addNotesColumn(null,null)
-		units.addTagsColumn(null, null)
-		armies.addTagsColumn(null, null)
-
 		this.dbTest()
 	}
 
